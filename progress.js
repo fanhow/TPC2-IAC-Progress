@@ -26,11 +26,11 @@ window.progressData = {
   forecast: {
     start: "2026-09-06",
     endExclusive: "2026-09-13",
-    label: "6–12 Sep 2026"
+    label: "6–12 Sep 2026, possibly later"
   },
 
   cautions: {
-    weather: "FO enclosure, splicing and testing may be suspended during strong wind or heavy rain.",
+    weather: "No offshore sailing is currently expected on 31 Aug and 1 Sep due to adverse weather and high waves. Activities planned for those dates cannot be treated as available working shifts.",
     iac26: "Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data.",
     nightShift: "Night work is currently expected only for this weekend. Night shifts after 30 Aug are not confirmed and remain subject to manpower and SOV availability."
   },
@@ -65,8 +65,8 @@ window.progressData = {
           retestScada: "pending",
           closeOut: "pending"
         },
-        remaining: "Planned across 29 Aug–2 Sep day shifts; night support after the weekend is unconfirmed",
-        note: "The latest 7DLA schedules FO terminations of String 3 from 29 Aug to 2 Sep day shifts. String 3 earthing is also shown on later night shifts, but those shifts are not confirmed."
+        remaining: "Planned from 29 Aug, but 31 Aug–1 Sep are expected no-sailing days; completion may move later",
+        note: "The latest 7DLA schedules FO terminations of String 3 from 29 Aug to 2 Sep day shifts. No offshore sailing is currently expected on 31 Aug and 1 Sep due to high waves, and later night-shift support is not confirmed."
       }
     },
 
@@ -84,8 +84,8 @@ window.progressData = {
           plugIn: "pending",
           closeOut: "pending"
         },
-        remaining: "Planned across 29 Aug–1 Sep day shifts; completion date is not confirmed",
-        note: "The latest 7DLA schedules HV terminations of String 2 from 29 Aug to 1 Sep day shifts. The exact starting stage and actual completion remain to be confirmed."
+        remaining: "Weekend day shifts only before two expected no-sailing days; at least two shifts may roll over",
+        note: "The latest 7DLA schedules HV terminations of String 2 from 29 Aug to 1 Sep. No offshore sailing is currently expected on 31 Aug and 1 Sep due to high waves, so completion by 1 Sep is no longer a reliable assumption."
       },
       FO: {
         stages: {
@@ -118,8 +118,8 @@ window.progressData = {
           plugIn: "tbc",
           closeOut: "pending"
         },
-        remaining: "Planned on 2 Sep day shift; duration beyond the current 7DLA is not confirmed",
-        note: "The latest 7DLA shows HV terminations of String 1 on 2 Sep day shift. Earlier PHOC and routing works were completed, but the exact remaining stage and duration are not confirmed."
+        remaining: "Originally planned on 2 Sep; may be delayed by the rolled-over String 2 scope",
+        note: "The latest 7DLA shows HV terminations of String 1 on 2 Sep day shift. Expected no-sailing days on 31 Aug and 1 Sep may push unfinished String 2 work forward, so the String 1 start is not confirmed."
       },
       FO: {
         stages: {
@@ -133,8 +133,8 @@ window.progressData = {
           retestScada: "pending",
           closeOut: "pending"
         },
-        remaining: "At least 3–4 night shifts; only weekend night work is currently expected",
-        note: "The 7DLA schedules FO terminations of String 1 from the 30 Aug night shift onward. Night shifts after the weekend are not confirmed due to manpower and SOV availability, so this scope may remain outstanding."
+        remaining: "At least 3–4 night shifts; weekend work remains weather-dependent and later nights are unconfirmed",
+        note: "The 7DLA schedules FO terminations of String 1 from the 30 Aug night shift onward. No offshore sailing is expected on 31 Aug and 1 Sep, and later night shifts are not confirmed due to manpower and SOV availability, so this scope may remain outstanding."
       }
     },
 
