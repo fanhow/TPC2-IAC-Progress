@@ -1,27 +1,951 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TPC2 SPIE OSS IAC Progress</title>
-<style>
-:root{--bg:#f6f8fb;--card:#fff;--text:#16202a;--muted:#667085;--border:#d9dee7;--done:#cfe9d5;--progress:#f7e7b6;--pending:#f4f6f8;--tbc:#dfe3f4;--accent:#2457a6;--timeline:#e8edf5;--window:#d8eadf;--today:#1f4f96}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}.wrap{max-width:1220px;margin:auto;padding:18px}h1{font-size:24px;margin:0 0 4px}.sub{color:var(--muted);font-size:14px}.top{display:grid;grid-template-columns:1.3fr .7fr;gap:12px;margin:16px 0}.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}.k{font-size:12px;color:var(--muted);text-transform:uppercase}.big{font-size:20px;font-weight:700;margin-top:2px}.small{font-size:13px;color:var(--muted);line-height:1.45}.labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:10px 0 5px}.timeline{height:16px;background:var(--timeline);border:1px solid var(--border);border-radius:999px;position:relative;overflow:visible}.window{position:absolute;top:0;bottom:0;background:var(--window);border-radius:999px}.today{position:absolute;top:-7px;width:3px;height:30px;background:var(--today);border-radius:3px}.today:after{content:"Today";position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--today);white-space:nowrap}.bar{height:12px;background:#edf0f4;border-radius:999px;overflow:hidden;margin-top:12px}.bar span{display:block;height:100%;background:#7894c4}.toolbar{display:flex;gap:8px;margin:14px 0}.toolbar button{border:1px solid var(--border);background:#fff;padding:9px 14px;border-radius:9px;font-size:14px;cursor:pointer}.toolbar .active{background:var(--accent);color:#fff;border-color:var(--accent)}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin:10px 0 14px}.dot{width:12px;height:12px;border:1px solid var(--border);border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}.tablebox{overflow:auto;background:var(--card);border:1px solid var(--border);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:1080px}th,td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:7px;text-align:center;font-size:12px}th:first-child,td:first-child{position:sticky;left:0;background:#fff;z-index:2;text-align:left;min-width:118px}thead th{background:#eef2f6;font-weight:600}thead th:first-child{z-index:3;background:#eef2f6}.cell{border:1px solid rgba(0,0,0,.06);border-radius:7px;padding:9px 5px;font-size:10.5px;line-height:1.2;width:100%;min-height:44px;cursor:pointer}.done{background:var(--done)}.progress{background:var(--progress)}.pending{background:var(--pending)}.tbc{background:var(--tbc)}.eta{display:block;font-size:9.5px;color:#475467;margin-top:3px}.remain{min-width:120px;font-size:11px;line-height:1.35}.mini{height:7px;background:#edf0f4;border-radius:999px;overflow:hidden;margin-top:5px}.mini span{display:block;height:100%;background:#7894c4}.detail,.note{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}.detail{margin-top:14px}.detail h3,.note h3{margin:0 0 6px;font-size:15px}.detail p,.note p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.notes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.footer{margin-top:14px;color:var(--muted);font-size:12px}@media(max-width:760px){.wrap{padding:12px}.top,.notes{grid-template-columns:1fr}h1{font-size:20px}}
-</style></head><body><div class="wrap">
-<h1>TPC2 SPIE OSS IAC Progress</h1><div class="sub">Interactive HV / FO progress matrix — working estimate based on available project recaps</div>
-<div class="top"><div class="card"><div class="k">Schedule timeline</div><div class="big" id="todayText">Today</div><div class="small">Forecast completion window: <strong>6–12 Sep 2026</strong> (conservative buffer)</div><div class="labels"><span>21 Aug</span><span>12 Sep</span></div><div class="timeline"><div class="window" id="win"></div><div class="today" id="marker"></div></div><div class="small" style="margin-top:8px">Current-date marker updates automatically from the viewer's device.</div></div><div class="card"><div class="k">Overall work progress</div><div class="big"><span id="pct">0</span>%</div><div class="small">Indicative only — calculated from recorded stage status, not SPIE's contractual completion percentage.</div><div class="bar"><span id="bar" style="width:0%"></span></div></div></div>
-<div class="toolbar"><button id="hv" class="active">HV</button><button id="fo">FO</button></div>
-<div class="legend"><span><span class="dot" style="background:var(--done)"></span>Completed</span><span><span class="dot" style="background:var(--progress)"></span>In progress</span><span><span class="dot" style="background:var(--pending)"></span>Pending</span><span><span class="dot" style="background:var(--tbc)"></span>TBC + estimated remaining shifts</span></div>
-<div class="tablebox"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
-<div class="detail" id="detail"><h3>HV Power Cable overview</h3><p>Tap any stage to view status and estimated remaining duration.</p></div>
-<div class="notes"><div class="note"><h3>Current critical work</h3><p>IAC09 HV is in final termination preparation. IAC26 FO is in splicing/testing and data verification. IAC21 FO remains dependent on night-shift availability.</p></div><div class="note"><h3>Planning caution</h3><p>FO enclosure, splicing and testing are weather-sensitive. Strong wind, heavy rain and unresolved test-data discrepancies may extend the schedule. Forecast completion is intentionally buffered to 6–12 Sep.</p></div></div>
-<div class="footer">Working estimate only — not a confirmed SPIE completion schedule.</div>
-</div><script>
-const iacs=[['IAC09','String 3'],['IAC17','String 2'],['IAC21','String 1'],['IAC22','String 5'],['IAC26','String 6']];
-const hvStages=['Cable prep','PHOC / hang-off','Soft routing','Core prep','Heat shrink','Accessories','Plug-in','Close-out'];
-const foStages=['Access / habitat','Enclosure prep','Cable prep','Routing / trays','Earthing','Pre-term test','Splicing','Re-test / SCADA','Close-out'];
-const hv={IAC09:{s:['done','done','done','done','progress','pending','pending','pending'],e:'~4–5 active day shifts',n:'L1 & L3 final heat shrinks applied; ready for accessories installation and then plug-in. L2 exact latest status is not confirmed.'},IAC17:{s:['done','done','done','tbc','tbc','tbc','pending','pending'],e:'~4–5 active shifts',n:'HV termination still appears as remaining in SPIE planning; exact current stage is not confirmed.'},IAC21:{s:['done','done','done','tbc','tbc','tbc','tbc','pending'],e:'~3–5 active shifts (TBC)',n:'Earlier PHOC / routing work was completed. Exact remaining HV stage is not confirmed.'},IAC22:{s:['done','done','done','done','done','done','done','progress'],e:'~1–2 shifts close-out',n:'L1, L2 and L3 have been plugged in. Main HV termination is substantially complete; close-out / punch items may remain.'},IAC26:{s:['done','done','done','tbc','tbc','tbc','tbc','tbc'],e:'TBC — HV scope unclear',n:'Current confirmed activity is FO. Latest records do not clearly establish the remaining HV termination stage.'}};
-const fo={IAC09:{s:['done','progress','progress','progress','tbc','progress','pending','pending','pending'],e:'~3–4 active shifts',n:'FO preparation / pre-term testing is ongoing according to current planning. Exact completed fibre count and enclosure status are not confirmed.'},IAC17:{s:['done','done','done','done','done','done','done','done','done'],e:'Complete / close-out only',n:'FO testing reported completed.'},IAC21:{s:['done','done','done','done','tbc','tbc','pending','pending','pending'],e:'~3–4 night shifts',n:'Remaining FO termination work is pending and linked to night-shift availability. Exact fibre/splicing stage is not confirmed.'},IAC22:{s:['done','done','done','done','tbc','done','tbc','tbc','tbc'],e:'~1–2 shifts if close-out remains',n:'Earlier records show FO pre-term work completed. Later splicing / final close-out status is not fully confirmed.'},IAC26:{s:['done','done','done','done','done','done','progress','progress','pending'],e:'~3–4 active shifts',n:'2 × 24F cables stripped, routed and prepared into trays; earthing connected; 36 fibres spliced. Testing / SCADA verification remains ongoing after test-data discrepancies.'}};
-const label={done:'Completed',progress:'In progress',pending:'Pending',tbc:'TBC'},w={done:1,progress:.5,pending:0,tbc:.25};let view='hv';
-function render(){const stages=view==='hv'?hvStages:foStages,data=view==='hv'?hv:fo;document.getElementById('thead').innerHTML='<tr><th>IAC</th>'+stages.map(x=>`<th>${x}</th>`).join('')+'<th>Est. remaining</th></tr>';document.getElementById('tbody').innerHTML=iacs.map(([id,str])=>{const o=data[id],rp=Math.round(o.s.reduce((a,x)=>a+w[x],0)/o.s.length*100);return `<tr><td><strong>${id}</strong><br><span style="color:#667085">${str}</span></td>${o.s.map((st,i)=>`<td><button class="cell ${st}" data-id="${id}" data-stage="${stages[i]}" data-st="${st}">${label[st]}${st==='tbc'?`<span class="eta">${o.e}</span>`:''}</button></td>`).join('')}<td class="remain"><strong>${o.e}</strong><div class="mini"><span style="width:${rp}%"></span></div><span style="color:#667085">${rp}% indicative</span></td></tr>`}).join('');document.querySelectorAll('.cell').forEach(b=>b.onclick=()=>{const o=data[b.dataset.id];document.getElementById('detail').innerHTML=`<h3>${b.dataset.id} — ${b.dataset.stage}</h3><p><strong>Status:</strong> ${label[b.dataset.st]}<br><strong>Estimated remaining:</strong> ${o.e}<br>${o.n}</p>`});const all=Object.values(data).flatMap(o=>o.s),p=Math.round(all.reduce((a,x)=>a+w[x],0)/all.length*100);document.getElementById('pct').textContent=p;document.getElementById('bar').style.width=p+'%';document.getElementById('detail').innerHTML=`<h3>${view==='hv'?'HV Power Cable':'Fibre Optic'} overview</h3><p>Tap any stage to view status and estimated remaining duration.</p>`}
-function timeline(){const st=new Date(2026,7,21),en=new Date(2026,8,12),ws=new Date(2026,8,6),now=new Date(),total=en-st,pos=Math.max(0,Math.min(1,(now-st)/total)),p2=Math.max(0,Math.min(1,(ws-st)/total));document.getElementById('marker').style.left=pos*100+'%';document.getElementById('win').style.left=p2*100+'%';document.getElementById('win').style.width=(1-p2)*100+'%';document.getElementById('todayText').textContent='Today: '+new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(now)}
-document.getElementById('hv').onclick=()=>{view='hv';hv.classList.add('active');fo.classList.remove('active');render()};document.getElementById('fo').onclick=()=>{view='fo';fo.classList.add('active');hv.classList.remove('active');render()};timeline();render();
-</script></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="theme-color" content="#071b2d">
+  <meta name="description" content="TPC2 OSS SPIE inter-array cable HV and fibre-optic progress dashboard.">
+  <title>TPC2 OSS — SPIE IAC Progress</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --navy-950: #04111e;
+      --navy-900: #071b2d;
+      --navy-850: #0a2237;
+      --navy-800: #0c2942;
+      --card: rgba(12, 41, 66, 0.72);
+      --card-solid: #0c2942;
+      --line: rgba(154, 190, 216, 0.18);
+      --text: #edf6fb;
+      --muted: #9bb5c6;
+      --cyan: #45d5e8;
+      --cyan-soft: rgba(69, 213, 232, 0.15);
+      --green: #40d69a;
+      --green-soft: rgba(64, 214, 154, 0.15);
+      --amber: #ffbd59;
+      --amber-soft: rgba(255, 189, 89, 0.16);
+      --slate: #708aa0;
+      --slate-soft: rgba(112, 138, 160, 0.16);
+      --purple: #b29cff;
+      --purple-soft: rgba(178, 156, 255, 0.16);
+      --danger: #ff8f86;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% -10%, rgba(69, 213, 232, 0.12), transparent 32rem),
+        linear-gradient(160deg, var(--navy-950) 0%, var(--navy-900) 48%, #061827 100%);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button, a { font: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(69, 213, 232, 0.5);
+      outline-offset: 3px;
+    }
+
+    .page-shell {
+      width: min(1480px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 46px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 9px;
+      color: var(--cyan);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 5px rgba(69, 213, 232, 0.1);
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(2rem, 4.2vw, 4.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      max-width: 720px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+    }
+
+    .date-panel {
+      flex: 0 0 auto;
+      min-width: 205px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(7, 27, 45, 0.72);
+      text-align: right;
+      box-shadow: var(--shadow);
+    }
+
+    .date-panel span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .date-panel strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 1.12rem;
+    }
+
+    .date-panel small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(270px, 0.6fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .timeline-panel { padding: 23px 24px 21px; }
+
+    .section-kicker {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.73rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .panel-title {
+      margin: 4px 0 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .forecast-title {
+      margin: 5px 0 0;
+      font-size: clamp(1.75rem, 3vw, 2.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .forecast-title span { color: var(--cyan); }
+
+    .timeline {
+      position: relative;
+      height: 78px;
+      margin-top: 25px;
+    }
+
+    .timeline-track {
+      position: absolute;
+      top: 28px;
+      right: 0;
+      left: 0;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(112, 138, 160, 0.22);
+    }
+
+    .timeline-elapsed {
+      width: var(--today-position, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #278aa0, var(--cyan));
+    }
+
+    .completion-window {
+      position: absolute;
+      top: 22px;
+      left: var(--forecast-left, 69%);
+      width: var(--forecast-width, 31%);
+      height: 20px;
+      border: 1px solid rgba(64, 214, 154, 0.5);
+      border-radius: 999px;
+      background: repeating-linear-gradient(
+        135deg,
+        rgba(64, 214, 154, 0.27),
+        rgba(64, 214, 154, 0.27) 8px,
+        rgba(64, 214, 154, 0.13) 8px,
+        rgba(64, 214, 154, 0.13) 16px
+      );
+    }
+
+    .today-marker {
+      position: absolute;
+      top: 0;
+      left: var(--today-position, 0%);
+      z-index: 2;
+      height: 51px;
+      border-left: 2px solid var(--text);
+      transform: translateX(-1px);
+    }
+
+    .today-marker::after {
+      position: absolute;
+      top: 25px;
+      left: -6px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--navy-900);
+      border-radius: 50%;
+      background: var(--text);
+      content: "";
+    }
+
+    .today-label {
+      position: absolute;
+      top: -3px;
+      left: 0;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--text);
+      color: var(--navy-950);
+      font-size: 0.67rem;
+      font-weight: 900;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .timeline-label {
+      position: absolute;
+      top: 49px;
+      color: var(--muted);
+      font-size: 0.73rem;
+    }
+
+    .timeline-label.start { left: 0; }
+    .timeline-label.window { left: var(--forecast-left, 69%); color: var(--green); }
+    .timeline-label.end { right: 0; }
+
+    .overall-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 23px 24px;
+    }
+
+    .overall-number {
+      margin-top: 8px;
+      font-size: clamp(3rem, 6vw, 4.7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .overall-number small {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: normal;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(112, 138, 160, 0.22);
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #278aa0, var(--cyan));
+      transition: width 320ms ease;
+    }
+
+    .overall-card .progress-track { margin-top: 20px; }
+
+    .overall-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.79rem;
+    }
+
+    .workspace { overflow: hidden; }
+
+    .workspace-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 19px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tabs {
+      display: inline-flex;
+      gap: 5px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(4, 17, 30, 0.46);
+    }
+
+    .tab {
+      min-width: 126px;
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .tab[aria-selected="true"] {
+      background: var(--cyan);
+      color: var(--navy-950);
+      box-shadow: 0 5px 16px rgba(69, 213, 232, 0.18);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 15px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .dot-done { background: var(--green); }
+    .dot-progress { background: var(--amber); }
+    .dot-pending { background: var(--slate); }
+    .dot-tbc { background: var(--purple); }
+
+    .matrix-wrap {
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1200px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      padding: 11px 8px;
+      background: #0a2237;
+      color: var(--muted);
+      font-size: 0.69rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    thead th:first-child,
+    tbody th {
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      width: 160px;
+      min-width: 160px;
+      text-align: left;
+    }
+
+    thead th:first-child { background: #0a2237; }
+
+    thead th:last-child,
+    tbody td:last-child { border-right: 0; }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td { border-bottom: 0; }
+
+    tbody th {
+      padding: 13px 12px;
+      background: var(--card-solid);
+      box-shadow: 8px 0 20px rgba(4, 17, 30, 0.18);
+    }
+
+    .iac-id {
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .iac-string {
+      display: block;
+      color: var(--muted);
+      font-size: 0.73rem;
+      font-weight: 500;
+    }
+
+    .row-progress {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .row-progress .progress-track { height: 5px; }
+
+    .row-progress span {
+      color: var(--muted);
+      font-size: 0.67rem;
+      font-weight: 800;
+    }
+
+    tbody td {
+      min-width: 112px;
+      padding: 8px;
+      background: rgba(7, 27, 45, 0.34);
+      text-align: center;
+    }
+
+    .status-cell {
+      width: 100%;
+      min-height: 54px;
+      padding: 7px 6px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 0.67rem;
+      font-weight: 850;
+      line-height: 1.18;
+      transition: transform 150ms ease, border-color 150ms ease;
+    }
+
+    .status-cell:hover {
+      border-color: currentColor;
+      transform: translateY(-1px);
+    }
+
+    .status-cell .mark {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.93rem;
+    }
+
+    .status-done {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status-progress {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .status-pending {
+      background: var(--slate-soft);
+      color: #a8bdcc;
+    }
+
+    .status-tbc {
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .detail-card { padding: 21px 22px; }
+
+    .detail-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+    }
+
+    .detail-heading h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 850;
+    }
+
+    .detail-note {
+      margin: 0;
+      color: #d3e2eb;
+    }
+
+    .remaining {
+      margin: 15px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .remaining strong { color: var(--text); }
+
+    .caution-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .caution {
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(7, 27, 45, 0.52);
+    }
+
+    .caution strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.83rem;
+    }
+
+    .caution p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .caution.weather { border-left: 3px solid var(--amber); }
+    .caution.data { border-left: 3px solid var(--purple); }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+      padding: 16px 2px 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    footer strong { color: var(--danger); }
+
+    .mobile-hint {
+      display: none;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.73rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .topbar { flex-direction: column; }
+      .date-panel { width: 100%; text-align: left; }
+      .hero-grid, .details-grid { grid-template-columns: 1fr; }
+      .overall-card { min-height: 220px; }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        width: min(100% - 20px, 1480px);
+        padding-top: 20px;
+      }
+
+      h1 { font-size: 2.45rem; }
+      .timeline-panel, .overall-card, .detail-card { padding: 18px; }
+      .workspace-head { align-items: stretch; padding: 14px; }
+      .tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+      .tab { min-width: 0; }
+      .legend { gap: 7px 12px; }
+      .mobile-hint { display: block; }
+      .timeline-label.window { display: none; }
+      footer { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+      .progress-fill, .status-cell { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">TPC2 Offshore Substation</p>
+        <h1>SPIE IAC Progress</h1>
+        <p class="subtitle">Indicative HV and fibre-optic workstream status for five inter-array cables. Select a workstream and tap any stage for the latest known detail.</p>
+      </div>
+      <div class="date-panel" aria-label="Current and status dates">
+        <span>Today</span>
+        <strong id="current-date">—</strong>
+        <small id="status-date">Status basis: —</small>
+      </div>
+    </header>
+
+    <section class="hero-grid" aria-label="Schedule overview">
+      <article class="panel timeline-panel">
+        <p class="section-kicker">Conservative planning window</p>
+        <p class="forecast-title">Estimated completion: <span id="forecast-label">6–12 Sep 2026</span></p>
+        <div class="timeline" id="timeline" aria-label="Schedule timeline from 21 August to 12 September 2026">
+          <div class="timeline-track"><div class="timeline-elapsed"></div></div>
+          <div class="completion-window" title="Estimated completion window"></div>
+          <div class="today-marker"><span class="today-label">TODAY</span></div>
+          <span class="timeline-label start">21 Aug</span>
+          <span class="timeline-label window">Forecast window</span>
+          <span class="timeline-label end">12 Sep</span>
+        </div>
+      </article>
+
+      <article class="panel overall-card">
+        <div>
+          <p class="section-kicker"><span id="overall-view">HV</span> indicative progress</p>
+          <div class="overall-number"><span id="overall-percent">0</span><small>%</small></div>
+        </div>
+        <div>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="overall-fill"></div></div>
+          <p>Completed stages count fully; in-progress stages count halfway. TBC is intentionally not treated as complete.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel workspace" aria-labelledby="matrix-title">
+      <div class="workspace-head">
+        <div>
+          <p class="section-kicker">Stage matrix</p>
+          <h2 class="panel-title" id="matrix-title">Five IAC workstreams</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Select workstream">
+          <button class="tab" id="tab-hv" role="tab" aria-selected="true" aria-controls="matrix-panel" data-view="HV">HV Power Cable</button>
+          <button class="tab" id="tab-fo" role="tab" aria-selected="false" aria-controls="matrix-panel" data-view="FO">Fibre Optic</button>
+        </div>
+        <div class="legend" aria-label="Status legend">
+          <span class="legend-item"><span class="legend-dot dot-done"></span>Completed</span>
+          <span class="legend-item"><span class="legend-dot dot-progress"></span>In Progress</span>
+          <span class="legend-item"><span class="legend-dot dot-pending"></span>Pending</span>
+          <span class="legend-item"><span class="legend-dot dot-tbc"></span>TBC</span>
+        </div>
+      </div>
+      <div class="mobile-hint">Swipe horizontally to view every stage.</div>
+      <div class="matrix-wrap" id="matrix-panel" role="tabpanel" aria-labelledby="tab-hv">
+        <table aria-label="IAC progress stage matrix">
+          <thead id="matrix-head"></thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="details-grid" aria-label="Selected status and planning cautions">
+      <article class="panel detail-card" id="detail-card" aria-live="polite">
+        <div class="detail-heading">
+          <h2 id="detail-title">HV Power Cable overview</h2>
+          <span class="badge status-tbc" id="detail-badge">Select a stage</span>
+        </div>
+        <p class="detail-note" id="detail-note">Tap any IAC stage to view its status, estimated remaining shifts and latest note.</p>
+        <p class="remaining" id="detail-remaining"><strong>Planning note:</strong> TBC means the available records do not confirm the exact stage.</p>
+      </article>
+
+      <aside class="caution-stack">
+        <div class="caution weather">
+          <strong>Weather-sensitive FO work</strong>
+          <p id="weather-note">FO enclosure, splicing and testing may be suspended during strong wind or heavy rain.</p>
+        </div>
+        <div class="caution data">
+          <strong>IAC26 data verification</strong>
+          <p id="data-note">Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data.</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <span><strong>Working estimate only — not a confirmed SPIE completion schedule.</strong></span>
+      <span>Public progress view · No PTW numbers, personal data or internal links</span>
+    </footer>
+  </main>
+
+  <script src="./progress.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var data = window.progressData;
+
+      if (!data || !data.iacs) {
+        document.body.innerHTML = "<main class='page-shell'><section class='panel detail-card'><h1>Progress data unavailable</h1><p>Check that progress.js is in the same folder as index.html.</p></section></main>";
+        return;
+      }
+
+      var stageDefinitions = {
+        HV: [
+          { key: "cablePrep", label: "Cable Prep" },
+          { key: "hangOff", label: "PHOC / Hang-Off" },
+          { key: "softRouting", label: "Soft Routing" },
+          { key: "corePrep", label: "Core Prep" },
+          { key: "heatShrink", label: "Heat Shrink" },
+          { key: "accessories", label: "Accessories" },
+          { key: "plugIn", label: "Plug-In" },
+          { key: "closeOut", label: "Close-Out" }
+        ],
+        FO: [
+          { key: "access", label: "Access / Habitat" },
+          { key: "enclosurePrep", label: "Enclosure Prep" },
+          { key: "cablePrep", label: "Cable Prep" },
+          { key: "routingTrays", label: "Routing / Trays" },
+          { key: "earthing", label: "Earthing" },
+          { key: "preTermTest", label: "Pre-Term Test" },
+          { key: "splicing", label: "Splicing" },
+          { key: "retestScada", label: "Re-Test / SCADA" },
+          { key: "closeOut", label: "Close-Out" }
+        ]
+      };
+
+      var statusMeta = {
+        done: { label: "Completed", mark: "✓", className: "status-done" },
+        progress: { label: "In Progress", mark: "●", className: "status-progress" },
+        pending: { label: "Pending", mark: "○", className: "status-pending" },
+        tbc: { label: "TBC", mark: "?", className: "status-tbc" }
+      };
+
+      var view = "HV";
+      var currentDate = new Date();
+      var dateFormatter = new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+
+      document.getElementById("current-date").textContent = dateFormatter.format(currentDate);
+      document.getElementById("status-date").textContent = "Status basis: " + formatIsoDate(data.statusDate);
+      document.getElementById("forecast-label").textContent = data.forecast.label;
+      document.getElementById("weather-note").textContent = data.cautions.weather;
+      document.getElementById("data-note").textContent = data.cautions.iac26;
+
+      setupTimeline();
+      bindTabs();
+      render();
+
+      function formatIsoDate(value) {
+        var parts = value.split("-");
+        return dateFormatter.format(new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));
+      }
+
+      function utcDay(value) {
+        var parts = value.split("-");
+        return Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      }
+
+      function clamp(value, minimum, maximum) {
+        return Math.min(Math.max(value, minimum), maximum);
+      }
+
+      function setupTimeline() {
+        var timeline = document.getElementById("timeline");
+        var start = utcDay(data.timeline.start);
+        var endExclusive = utcDay(data.timeline.endExclusive);
+        var forecastStart = utcDay(data.forecast.start);
+        var forecastEndExclusive = utcDay(data.forecast.endExclusive);
+        var todayUtc = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        var duration = endExclusive - start;
+        var todayPosition = clamp(((todayUtc - start) / duration) * 100, 0, 100);
+        var forecastLeft = clamp(((forecastStart - start) / duration) * 100, 0, 100);
+        var forecastRight = clamp(((forecastEndExclusive - start) / duration) * 100, 0, 100);
+
+        timeline.style.setProperty("--today-position", todayPosition + "%");
+        timeline.style.setProperty("--forecast-left", forecastLeft + "%");
+        timeline.style.setProperty("--forecast-width", Math.max(forecastRight - forecastLeft, 0) + "%");
+        timeline.querySelector(".today-marker").title = "Today: " + dateFormatter.format(currentDate);
+      }
+
+      function bindTabs() {
+        document.querySelectorAll(".tab").forEach(function (button) {
+          button.addEventListener("click", function () {
+            view = button.dataset.view;
+            document.querySelectorAll(".tab").forEach(function (item) {
+              var active = item.dataset.view === view;
+              item.setAttribute("aria-selected", String(active));
+            });
+            document.getElementById("matrix-panel").setAttribute("aria-labelledby", view === "HV" ? "tab-hv" : "tab-fo");
+            render();
+          });
+        });
+      }
+
+      function getWorkstream(iac, selectedView) {
+        return iac[selectedView] || { stages: {}, remaining: "TBC", note: "No status note available." };
+      }
+
+      function calculateProgress(workstream, stages) {
+        var points = stages.reduce(function (total, stage) {
+          var state = workstream.stages[stage.key] || "tbc";
+          if (state === "done") return total + 1;
+          if (state === "progress") return total + 0.5;
+          return total;
+        }, 0);
+        return Math.round((points / stages.length) * 100);
+      }
+
+      function render() {
+        var stages = stageDefinitions[view];
+        var head = document.getElementById("matrix-head");
+        var body = document.getElementById("matrix-body");
+
+        head.innerHTML = "";
+        body.innerHTML = "";
+
+        var headerRow = document.createElement("tr");
+        headerRow.appendChild(makeHeaderCell("IAC / Progress"));
+        stages.forEach(function (stage) {
+          headerRow.appendChild(makeHeaderCell(stage.label));
+        });
+        head.appendChild(headerRow);
+
+        var totalPoints = 0;
+        data.iacs.forEach(function (iac) {
+          var workstream = getWorkstream(iac, view);
+          var percent = calculateProgress(workstream, stages);
+          totalPoints += percent;
+          body.appendChild(makeRow(iac, workstream, stages, percent));
+        });
+
+        var overall = Math.round(totalPoints / data.iacs.length);
+        document.getElementById("overall-view").textContent = view;
+        document.getElementById("overall-percent").textContent = overall;
+        document.getElementById("overall-fill").style.width = overall + "%";
+        document.getElementById("overall-fill").parentElement.setAttribute("aria-label", view + " indicative progress " + overall + " percent");
+        showOverview();
+      }
+
+      function makeHeaderCell(label) {
+        var th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = label;
+        return th;
+      }
+
+      function makeRow(iac, workstream, stages, percent) {
+        var row = document.createElement("tr");
+        var heading = document.createElement("th");
+        heading.scope = "row";
+        heading.innerHTML =
+          "<span class='iac-id'>" + escapeHtml(iac.id) + "</span>" +
+          "<span class='iac-string'>" + escapeHtml(iac.string) + "</span>" +
+          "<span class='row-progress'><span class='progress-track'><span class='progress-fill' style='width:" + percent + "%'></span></span><span>" + percent + "%</span></span>";
+        row.appendChild(heading);
+
+        stages.forEach(function (stage) {
+          var status = workstream.stages[stage.key] || "tbc";
+          var meta = statusMeta[status] || statusMeta.tbc;
+          var cell = document.createElement("td");
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "status-cell " + meta.className;
+          button.innerHTML = "<span class='mark' aria-hidden='true'>" + meta.mark + "</span>" + meta.label;
+          button.setAttribute("aria-label", iac.id + " " + view + " " + stage.label + ": " + meta.label);
+          button.addEventListener("click", function () {
+            showDetail(iac, workstream, stage, meta);
+          });
+          cell.appendChild(button);
+          row.appendChild(cell);
+        });
+
+        return row;
+      }
+
+      function showOverview() {
+        var title = view === "HV" ? "HV Power Cable overview" : "Fibre Optic overview";
+        document.getElementById("detail-title").textContent = title;
+        document.getElementById("detail-badge").className = "badge status-tbc";
+        document.getElementById("detail-badge").textContent = "Select a stage";
+        document.getElementById("detail-note").textContent = "Tap any IAC stage to view its status, estimated remaining shifts and latest note.";
+        document.getElementById("detail-remaining").innerHTML = "<strong>Planning note:</strong> TBC means the available records do not confirm the exact stage.";
+      }
+
+      function showDetail(iac, workstream, stage, meta) {
+        document.getElementById("detail-title").textContent = iac.id + " / " + iac.string + " — " + stage.label;
+        document.getElementById("detail-badge").className = "badge " + meta.className;
+        document.getElementById("detail-badge").textContent = meta.label;
+        document.getElementById("detail-note").textContent = workstream.note;
+        document.getElementById("detail-remaining").innerHTML = "<strong>Estimated remaining:</strong> " + escapeHtml(workstream.remaining);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    })();
+  </script>
+</body>
+</html>
