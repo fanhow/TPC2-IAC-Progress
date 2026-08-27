@@ -15,7 +15,8 @@
 */
 
 window.progressData = {
-  statusDate: "2026-08-26",
+  statusDate: "2026-08-27",
+  basisLabel: "SPIE 7DLA issued 27 Aug 2026",
 
   timeline: {
     start: "2026-08-21",
@@ -30,7 +31,8 @@ window.progressData = {
 
   cautions: {
     weather: "FO enclosure, splicing and testing may be suspended during strong wind or heavy rain.",
-    iac26: "Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data."
+    iac26: "Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data.",
+    nightShift: "Night work is currently expected only for this weekend. Night shifts after 30 Aug are not confirmed and remain subject to manpower and SOV availability."
   },
 
   iacs: [
@@ -48,8 +50,8 @@ window.progressData = {
           plugIn: "pending",
           closeOut: "pending"
         },
-        remaining: "4–5 active day shifts",
-        note: "L1 & L3 final heat shrinks applied; ready for accessories installation and then plug-in. L2 exact status is not confirmed in the latest recap."
+        remaining: "Planned through 28 Aug day shift; actual completion remains subject to progress",
+        note: "The latest 7DLA schedules HV terminations of String 3 on 27–28 Aug day shifts. The latest confirmed field update remains: L1 & L3 final heat shrinks applied; L2 exact status is not confirmed."
       },
       FO: {
         stages: {
@@ -63,8 +65,8 @@ window.progressData = {
           retestScada: "pending",
           closeOut: "pending"
         },
-        remaining: "3–4 active shifts, subject to testing results and weather",
-        note: "FO preparation and pre-term testing are ongoing. Exact completed fibre count and enclosure status are not confirmed."
+        remaining: "Planned across 29 Aug–2 Sep day shifts; night support after the weekend is unconfirmed",
+        note: "The latest 7DLA schedules FO terminations of String 3 from 29 Aug to 2 Sep day shifts. String 3 earthing is also shown on later night shifts, but those shifts are not confirmed."
       }
     },
 
@@ -82,8 +84,8 @@ window.progressData = {
           plugIn: "pending",
           closeOut: "pending"
         },
-        remaining: "TBC — allow approximately 4–5 active shifts for planning",
-        note: "FO testing is complete, but HV termination remains in SPIE planning. The exact current HV termination stage and duration are not confirmed."
+        remaining: "Planned across 29 Aug–1 Sep day shifts; completion date is not confirmed",
+        note: "The latest 7DLA schedules HV terminations of String 2 from 29 Aug to 1 Sep day shifts. The exact starting stage and actual completion remain to be confirmed."
       },
       FO: {
         stages: {
@@ -98,7 +100,7 @@ window.progressData = {
           closeOut: "done"
         },
         remaining: "Completed",
-        note: "FO testing was reported completed. The FO workstream is shown as complete based on the latest available recap."
+        note: "FO testing was previously reported completed. A String 2 earthing arrangement appears on the 2 Sep night plan, but its workstream and shift availability are not confirmed."
       }
     },
 
@@ -116,8 +118,8 @@ window.progressData = {
           plugIn: "tbc",
           closeOut: "pending"
         },
-        remaining: "TBC — exact remaining HV stage and duration not confirmed",
-        note: "Earlier PHOC and routing works were completed. The exact remaining HV termination stage is not confirmed in the latest records."
+        remaining: "Planned on 2 Sep day shift; duration beyond the current 7DLA is not confirmed",
+        note: "The latest 7DLA shows HV terminations of String 1 on 2 Sep day shift. Earlier PHOC and routing works were completed, but the exact remaining stage and duration are not confirmed."
       },
       FO: {
         stages: {
@@ -131,8 +133,8 @@ window.progressData = {
           retestScada: "pending",
           closeOut: "pending"
         },
-        remaining: "3–4 night shifts, subject to restart of night-shift work",
-        note: "Remaining FO termination work is pending and linked to night-shift availability. The exact fibre and splicing stage is not confirmed."
+        remaining: "At least 3–4 night shifts; only weekend night work is currently expected",
+        note: "The 7DLA schedules FO terminations of String 1 from the 30 Aug night shift onward. Night shifts after the weekend are not confirmed due to manpower and SOV availability, so this scope may remain outstanding."
       }
     },
 
@@ -165,8 +167,8 @@ window.progressData = {
           retestScada: "tbc",
           closeOut: "tbc"
         },
-        remaining: "TBC — final splicing, testing and close-out status not confirmed",
-        note: "Earlier records show FO pre-term work completed for String 5 / IAC22. Later splicing and final close-out status are not fully confirmed."
+        remaining: "TBC — String 5 earthing is shown on the 30 Aug night plan",
+        note: "Earlier records show FO pre-term work completed for String 5 / IAC22. The latest 7DLA shows a String 5 earthing arrangement on the 30 Aug night shift; later close-out status is not confirmed."
       }
     },
 
@@ -199,8 +201,8 @@ window.progressData = {
           retestScada: "progress",
           closeOut: "pending"
         },
-        remaining: "3–4 working shifts, subject to weather and resolution of testing issues",
-        note: "2 × 24F cables stripped, routed and prepared into trays; earthing connected; 36 fibres spliced. Testing and SCADA data verification remain ongoing after test-data discrepancies."
+        remaining: "Planned for 27–28 Aug day shifts, subject to weather and test resolution",
+        note: "The latest 7DLA continues FO terminations of String 6 on 27–28 Aug day shifts. The latest confirmed field update remains: 36 fibres spliced, with testing and SCADA data verification still ongoing after test-data discrepancies."
       }
     }
   ]

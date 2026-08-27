@@ -584,6 +584,7 @@
 
     .caution.weather { border-left: 3px solid var(--amber); }
     .caution.data { border-left: 3px solid var(--purple); }
+    .caution.night { border-left: 3px solid var(--cyan); }
 
     footer {
       display: flex;
@@ -723,6 +724,10 @@
           <strong>IAC26 data verification</strong>
           <p id="data-note">Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data.</p>
         </div>
+        <div class="caution night">
+          <strong>Night-shift constraint</strong>
+          <p id="night-note">Night work after this weekend is not confirmed and remains subject to manpower and SOV availability.</p>
+        </div>
       </aside>
     </section>
 
@@ -784,10 +789,11 @@
       });
 
       document.getElementById("current-date").textContent = dateFormatter.format(currentDate);
-      document.getElementById("status-date").textContent = "Status basis: " + formatIsoDate(data.statusDate);
+      document.getElementById("status-date").textContent = "Status basis: " + formatIsoDate(data.statusDate) + (data.basisLabel ? " · " + data.basisLabel : "");
       document.getElementById("forecast-label").textContent = data.forecast.label;
       document.getElementById("weather-note").textContent = data.cautions.weather;
       document.getElementById("data-note").textContent = data.cautions.iac26;
+      document.getElementById("night-note").textContent = data.cautions.nightShift;
 
       setupTimeline();
       bindTabs();
