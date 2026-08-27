@@ -511,6 +511,88 @@
       color: var(--purple);
     }
 
+    .history-panel {
+      margin-top: 16px;
+      overflow: hidden;
+    }
+
+    .history-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 14px;
+    }
+
+    .history-note {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.76rem;
+      text-align: right;
+    }
+
+    .history-wrap { overflow-x: auto; }
+
+    .history-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    .history-table th,
+    .history-table td {
+      position: static;
+      width: auto;
+      min-width: 0;
+      padding: 12px 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+    }
+
+    .history-table thead th {
+      background: #0a2237;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .history-table th:first-child,
+    .history-table td:first-child { text-align: left; }
+
+    .history-table tbody th {
+      background: rgba(12, 41, 66, 0.7);
+      box-shadow: none;
+      color: var(--text);
+    }
+
+    .history-table tbody td { background: rgba(7, 27, 45, 0.34); }
+
+    .history-value {
+      color: var(--text);
+      font-size: 0.94rem;
+      font-weight: 850;
+    }
+
+    .pp-change {
+      display: inline-block;
+      min-width: 52px;
+      margin-left: 8px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 850;
+      text-align: center;
+    }
+
+    .pp-positive { background: var(--green-soft); color: var(--green); }
+    .pp-neutral { background: var(--slate-soft); color: #a8bdcc; }
+    .pp-negative { background: rgba(255, 143, 134, 0.14); color: var(--danger); }
+    .pp-baseline { color: var(--muted); }
+
     .details-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
@@ -623,6 +705,8 @@
 
       h1 { font-size: 2.45rem; }
       .timeline-panel, .overall-card, .detail-card { padding: 18px; }
+      .history-head { align-items: flex-start; flex-direction: column; }
+      .history-note { text-align: left; }
       .workspace-head { align-items: stretch; padding: 14px; }
       .tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
       .tab { min-width: 0; }
@@ -701,6 +785,24 @@
         <table aria-label="IAC progress stage matrix">
           <thead id="matrix-head"></thead>
           <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel history-panel" aria-labelledby="history-title">
+      <div class="history-head">
+        <div>
+          <p class="section-kicker">Daily progress history</p>
+          <h2 class="panel-title" id="history-title">HV, FO and Overall</h2>
+        </div>
+        <p class="history-note">Change is shown in percentage points (pp) against the previous recorded reporting day. The 26 Aug entry is the baseline reconstructed from the preceding dashboard snapshot.</p>
+      </div>
+      <div class="history-wrap">
+        <table class="history-table" aria-label="Daily HV, FO and overall progress history">
+          <thead>
+            <tr><th scope="col">Reporting date</th><th scope="col">HV</th><th scope="col">FO</th><th scope="col">Overall</th></tr>
+          </thead>
+          <tbody id="history-body"></tbody>
         </table>
       </div>
     </section>
@@ -797,6 +899,7 @@
 
       setupTimeline();
       bindTabs();
+      renderHistory();
       render();
 
       function formatIsoDate(value) {
@@ -850,6 +953,9 @@
       }
 
       function calculateProgress(workstream, stages) {
+        if (Number.isFinite(workstream.reportedPercent)) {
+          return clamp(Math.round(workstream.reportedPercent), 0, 100);
+        }
         var points = stages.reduce(function (total, stage) {
           var state = workstream.stages[stage.key] || "tbc";
           if (state === "done") return total + 1;
@@ -857,6 +963,47 @@
           return total;
         }, 0);
         return Math.round((points / stages.length) * 100);
+      }
+
+      function renderHistory() {
+        var body = document.getElementById("history-body");
+        var history = Array.isArray(data.history) ? data.history : [];
+        body.innerHTML = "";
+
+        history.forEach(function (snapshot, index) {
+          var previous = index > 0 ? history[index - 1] : null;
+          var row = document.createElement("tr");
+          var dateCell = document.createElement("th");
+          dateCell.scope = "row";
+          dateCell.textContent = formatIsoDate(snapshot.date);
+          row.appendChild(dateCell);
+
+          ["HV", "FO", "Overall"].forEach(function (metric) {
+            var cell = document.createElement("td");
+            var value = Number(snapshot[metric]);
+            var delta = previous ? value - Number(previous[metric]) : null;
+            cell.innerHTML =
+              "<span class='history-value'>" + value + "%</span>" +
+              formatDelta(delta);
+            row.appendChild(cell);
+          });
+
+          if (snapshot.note) row.title = snapshot.note;
+          body.appendChild(row);
+        });
+
+        if (!history.length) {
+          body.innerHTML = "<tr><td colspan='4'>No daily history recorded yet.</td></tr>";
+        }
+      }
+
+      function formatDelta(delta) {
+        if (delta === null || !Number.isFinite(delta)) {
+          return "<span class='pp-change pp-baseline'>baseline</span>";
+        }
+        var className = delta > 0 ? "pp-positive" : delta < 0 ? "pp-negative" : "pp-neutral";
+        var sign = delta > 0 ? "+" : "";
+        return "<span class='pp-change " + className + "'>" + sign + delta + " pp</span>";
       }
 
       function render() {
