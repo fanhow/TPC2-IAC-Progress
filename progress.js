@@ -16,8 +16,8 @@
 */
 
 window.progressData = {
-  statusDate: "2026-08-27",
-  basisLabel: "SPIE 7DLA issued 27 Aug 2026",
+  statusDate: "2026-08-28",
+  basisLabel: "No offshore activities due to adverse weather",
 
   timeline: {
     start: "2026-08-21",
@@ -50,6 +50,13 @@ window.progressData = {
       FO: 66,
       Overall: 61,
       note: "IAC09 L1 and L3 plugged in; IAC26 FO reported 95% complete"
+    },
+    {
+      date: "2026-08-28",
+      HV: 55,
+      FO: 66,
+      Overall: 61,
+      note: "No offshore activities due to adverse weather; daily progress 0 pp"
     }
   ],
 
