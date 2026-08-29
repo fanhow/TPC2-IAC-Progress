@@ -821,7 +821,7 @@
       <div class="history-wrap">
         <table class="history-table" aria-label="Daily HV, FO and overall progress history">
           <thead>
-            <tr><th scope="col">Reporting date</th><th scope="col">Adverse weather</th><th scope="col">HV</th><th scope="col">FO</th><th scope="col">Overall</th></tr>
+            <tr><th scope="col">Reporting date</th><th scope="col">HV</th><th scope="col">FO</th><th scope="col">Overall</th><th scope="col">Adverse weather</th></tr>
           </thead>
           <tbody id="history-body"></tbody>
         </table>
@@ -999,15 +999,6 @@
           dateCell.textContent = formatIsoDate(snapshot.date);
           row.appendChild(dateCell);
 
-          var weatherCell = document.createElement("td");
-          var weatherLabel = snapshot.adverseWeather ? "Adverse weather / No offshore sailing" : "No adverse weather";
-          weatherCell.innerHTML =
-            "<label class='history-weather" + (snapshot.adverseWeather ? " is-checked" : "") + "'>" +
-              "<input type='checkbox' disabled" + (snapshot.adverseWeather ? " checked" : "") + " aria-label='" + escapeHtml(weatherLabel) + "'>" +
-              "<span>" + (snapshot.adverseWeather ? "No sailing" : "No") + "</span>" +
-            "</label>";
-          row.appendChild(weatherCell);
-
           ["HV", "FO", "Overall"].forEach(function (metric) {
             var cell = document.createElement("td");
             var value = Number(snapshot[metric]);
@@ -1017,6 +1008,15 @@
               formatDelta(delta);
             row.appendChild(cell);
           });
+
+          var weatherCell = document.createElement("td");
+          var weatherLabel = snapshot.adverseWeather ? "Adverse weather / No offshore sailing" : "No adverse weather";
+          weatherCell.innerHTML =
+            "<label class='history-weather" + (snapshot.adverseWeather ? " is-checked" : "") + "'>" +
+              "<input type='checkbox' disabled" + (snapshot.adverseWeather ? " checked" : "") + " aria-label='" + escapeHtml(weatherLabel) + "'>" +
+              "<span>" + (snapshot.adverseWeather ? "No sailing" : "No") + "</span>" +
+            "</label>";
+          row.appendChild(weatherCell);
 
           if (snapshot.note) row.title = snapshot.note;
           body.appendChild(row);
