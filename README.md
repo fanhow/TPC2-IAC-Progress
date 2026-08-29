@@ -8,14 +8,14 @@ Static GitHub Pages dashboard for the five TPC2 OSS inter-array cables:
 - IAC22 / String 5
 - IAC26 / String 6
 
-The dashboard separates HV and FO workstreams, shows each stage status, and calculates indicative row and overall progress.
+The dashboard separates HV and FO workstreams, shows each stage status, calculates indicative row and overall progress, and keeps a daily HV, FO and Overall history with percentage-point changes.
 
 ## Files
 
 | File | Purpose | Normal daily action |
 |---|---|---|
 | **index.html** | Layout, styling and dashboard logic | Do not edit |
-| **progress.js** | Current status, remaining shifts and notes | Edit this file only |
+| **progress.js** | Current status, daily history, remaining shifts and notes | Edit this file only |
 | **README.md** | Deployment and update instructions | Keep for reference |
 
 ## Daily update
@@ -26,7 +26,7 @@ Open **progress.js** and update:
 2. Stage status values
 3. **remaining**
 4. **note**
-5. **dailyProgress** when a shift record must be added
+5. Append the reporting-day snapshot to **history**
 
 Allowed stage status values:
 
@@ -54,21 +54,22 @@ Example:
       note: "L1 & L3 final heat shrinks applied."
     }
 
-Do not change stage names such as **cablePrep** or **heatShrink**. Change only the value on the right.
+Do not change stage names such as **cablePrep** or **heatShrink**. Change only the value on the right. When a verified field percentage is available, such as FO 95%, **reportedPercent** may be used to override the stage-derived percentage.
 
 ### Adverse-weather day
 
-Add an entry under **dailyProgress**:
+Add an entry under **history**, retain the previous cumulative percentages, and set **adverseWeather: true**:
 
     {
       date: "2026-08-28",
       adverseWeather: true,
-      progress: 0,
-      shiftStatus: "No offshore sailing",
-      note: "No offshore activities were carried out due to adverse weather."
+      HV: 55,
+      FO: 66,
+      Overall: 61,
+      note: "No offshore activities due to adverse weather; daily progress 0 pp"
     }
 
-Use **adverseWeather: true** only when the offshore shift did not proceed due to weather. This displays a checked, read-only weather box and records daily progress as 0%.
+Use **adverseWeather: true** only when the offshore shift did not proceed due to weather. The history table displays a checked, read-only weather box. Keeping the cumulative percentages unchanged records daily progress as 0 percentage points.
 
 ## First deployment to GitHub Pages
 
@@ -95,7 +96,7 @@ GitHub reference: [Configuring a publishing source for GitHub Pages](https://doc
 
 1. Open **progress.js** in the repository.
 2. Select the edit button.
-3. Update only the current status, remaining shifts and notes.
+3. Update the current status, append the new daily history snapshot, and revise remaining shifts and notes.
 4. Commit with a short message such as:
 
     Update SPIE progress — 27 Aug 2026

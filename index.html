@@ -586,93 +586,108 @@
     .caution.data { border-left: 3px solid var(--purple); }
     .caution.night { border-left: 3px solid var(--cyan); }
 
-    .daily-panel {
+    .history-panel {
       margin-top: 16px;
       overflow: hidden;
     }
 
-    .daily-head {
+    .history-head {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       gap: 18px;
-      padding: 20px 22px 16px;
-      border-bottom: 1px solid var(--line);
+      padding: 20px 22px 14px;
     }
 
-    .daily-head p:last-child {
-      max-width: 520px;
+    .history-note {
+      max-width: 620px;
       margin: 0;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-align: right;
     }
 
-    .daily-list {
-      display: grid;
+    .history-wrap { overflow-x: auto; }
+
+    .history-table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
     }
 
-    .daily-row {
-      display: grid;
-      grid-template-columns: minmax(135px, 0.55fr) minmax(245px, 1.1fr) minmax(130px, 0.5fr) minmax(260px, 1.5fr);
-      align-items: center;
-      gap: 18px;
-      padding: 17px 22px;
+    .history-table th,
+    .history-table td {
+      position: static;
+      width: auto;
+      min-width: 0;
+      padding: 12px 16px;
+      border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      background: rgba(7, 27, 45, 0.28);
+      text-align: right;
     }
 
-    .daily-row:last-child { border-bottom: 0; }
-
-    .daily-date strong,
-    .daily-progress strong {
-      display: block;
-      font-size: 0.9rem;
-    }
-
-    .daily-date span,
-    .daily-progress span {
-      display: block;
-      margin-top: 2px;
+    .history-table thead th {
+      background: #0a2237;
       color: var(--muted);
       font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .weather-check {
+    .history-table th:first-child,
+    .history-table td:first-child { text-align: left; }
+
+    .history-table tbody th {
+      background: rgba(12, 41, 66, 0.7);
+      box-shadow: none;
+      color: var(--text);
+    }
+
+    .history-table tbody td { background: rgba(7, 27, 45, 0.34); }
+
+    .history-value {
+      color: var(--text);
+      font-size: 0.94rem;
+      font-weight: 850;
+    }
+
+    .history-weather {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      min-height: 38px;
+      justify-content: flex-start;
+      gap: 8px;
+      min-width: 138px;
       color: var(--muted);
-      font-size: 0.79rem;
+      font-size: 0.72rem;
       font-weight: 800;
     }
 
-    .weather-check input {
-      width: 20px;
-      height: 20px;
+    .history-weather input {
+      width: 18px;
+      height: 18px;
       margin: 0;
       accent-color: var(--amber);
       opacity: 1;
     }
 
-    .weather-check.is-checked { color: var(--amber); }
+    .history-weather.is-checked { color: var(--amber); }
 
-    .daily-progress strong {
-      color: var(--green);
-      font-size: 1.15rem;
+    .pp-change {
+      display: inline-block;
+      min-width: 52px;
+      margin-left: 8px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 850;
+      text-align: center;
     }
 
-    .daily-progress.is-zero strong { color: var(--amber); }
-
-    .daily-note {
-      margin: 0;
-      color: #d3e2eb;
-      font-size: 0.8rem;
-    }
+    .pp-positive { background: var(--green-soft); color: var(--green); }
+    .pp-neutral { background: var(--slate-soft); color: #a8bdcc; }
+    .pp-negative { background: rgba(255, 143, 134, 0.14); color: var(--danger); }
+    .pp-baseline { color: var(--muted); }
 
     footer {
       display: flex;
@@ -701,8 +716,6 @@
       .date-panel { width: 100%; text-align: left; }
       .hero-grid, .details-grid { grid-template-columns: 1fr; }
       .overall-card { min-height: 220px; }
-      .daily-row { grid-template-columns: 1fr 1.2fr; }
-      .daily-note { grid-column: 1 / -1; }
     }
 
     @media (max-width: 640px) {
@@ -719,10 +732,8 @@
       .legend { gap: 7px 12px; }
       .mobile-hint { display: block; }
       .timeline-label.window { display: none; }
-      .daily-head { align-items: flex-start; flex-direction: column; padding: 17px; }
-      .daily-head p:last-child { text-align: left; }
-      .daily-row { grid-template-columns: 1fr; gap: 13px; padding: 16px 17px; }
-      .daily-note { grid-column: auto; }
+      .history-head { align-items: flex-start; flex-direction: column; }
+      .history-note { text-align: left; }
       footer { align-items: flex-start; flex-direction: column; }
     }
 
@@ -799,6 +810,24 @@
       </div>
     </section>
 
+    <section class="panel history-panel" aria-labelledby="history-title">
+      <div class="history-head">
+        <div>
+          <p class="section-kicker">Daily progress history</p>
+          <h2 class="panel-title" id="history-title">HV, FO and Overall</h2>
+        </div>
+        <p class="history-note">Adverse-weather days are checked and retain the previous cumulative percentages, producing 0 pp daily progress.</p>
+      </div>
+      <div class="history-wrap">
+        <table class="history-table" aria-label="Daily HV, FO and overall progress history">
+          <thead>
+            <tr><th scope="col">Reporting date</th><th scope="col">Adverse weather</th><th scope="col">HV</th><th scope="col">FO</th><th scope="col">Overall</th></tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="details-grid" aria-label="Selected status and planning cautions">
       <article class="panel detail-card" id="detail-card" aria-live="polite">
         <div class="detail-heading">
@@ -823,17 +852,6 @@
           <p id="night-note">Night work after this weekend is not confirmed and remains subject to manpower and SOV availability.</p>
         </div>
       </aside>
-    </section>
-
-    <section class="panel daily-panel" aria-labelledby="daily-title">
-      <div class="daily-head">
-        <div>
-          <p class="section-kicker">Shift record</p>
-          <h2 class="panel-title" id="daily-title">Daily Progress</h2>
-        </div>
-        <p>Adverse-weather days are recorded as 0% daily progress because no offshore sailing or work shift took place.</p>
-      </div>
-      <div class="daily-list" id="daily-progress-list" aria-live="polite"></div>
     </section>
 
     <footer>
@@ -902,7 +920,7 @@
 
       setupTimeline();
       bindTabs();
-      renderDailyProgress();
+      renderHistory();
       render();
 
       function formatIsoDate(value) {
@@ -951,39 +969,14 @@
         });
       }
 
-      function renderDailyProgress() {
-        var list = document.getElementById("daily-progress-list");
-        var entries = Array.isArray(data.dailyProgress) ? data.dailyProgress.slice() : [];
-
-        entries.sort(function (a, b) {
-          return b.date.localeCompare(a.date);
-        });
-
-        if (!entries.length) {
-          list.innerHTML = "<div class='daily-row'><p class='daily-note'>No daily shift records have been added.</p></div>";
-          return;
-        }
-
-        list.innerHTML = entries.map(function (entry) {
-          var weatherLabel = entry.adverseWeather ? "Adverse weather" : "No adverse weather";
-          var checked = entry.adverseWeather ? " checked" : "";
-          var checkedClass = entry.adverseWeather ? " is-checked" : "";
-          var zeroClass = Number(entry.progress) === 0 ? " is-zero" : "";
-
-          return "<article class='daily-row'>" +
-            "<div class='daily-date'><strong>" + escapeHtml(formatIsoDate(entry.date)) + "</strong><span>Offshore shift</span></div>" +
-            "<label class='weather-check" + checkedClass + "'><input type='checkbox' disabled" + checked + " aria-label='" + escapeHtml(weatherLabel) + "'><span>" + escapeHtml(weatherLabel) + " / " + escapeHtml(entry.shiftStatus) + "</span></label>" +
-            "<div class='daily-progress" + zeroClass + "'><strong>" + escapeHtml(entry.progress) + "%</strong><span>Daily progress</span></div>" +
-            "<p class='daily-note'>" + escapeHtml(entry.note) + "</p>" +
-          "</article>";
-        }).join("");
-      }
-
       function getWorkstream(iac, selectedView) {
         return iac[selectedView] || { stages: {}, remaining: "TBC", note: "No status note available." };
       }
 
       function calculateProgress(workstream, stages) {
+        if (Number.isFinite(workstream.reportedPercent)) {
+          return clamp(Math.round(workstream.reportedPercent), 0, 100);
+        }
         var points = stages.reduce(function (total, stage) {
           var state = workstream.stages[stage.key] || "tbc";
           if (state === "done") return total + 1;
@@ -991,6 +984,56 @@
           return total;
         }, 0);
         return Math.round((points / stages.length) * 100);
+      }
+
+      function renderHistory() {
+        var body = document.getElementById("history-body");
+        var history = Array.isArray(data.history) ? data.history : [];
+        body.innerHTML = "";
+
+        history.forEach(function (snapshot, index) {
+          var previous = index > 0 ? history[index - 1] : null;
+          var row = document.createElement("tr");
+          var dateCell = document.createElement("th");
+          dateCell.scope = "row";
+          dateCell.textContent = formatIsoDate(snapshot.date);
+          row.appendChild(dateCell);
+
+          var weatherCell = document.createElement("td");
+          var weatherLabel = snapshot.adverseWeather ? "Adverse weather / No offshore sailing" : "No adverse weather";
+          weatherCell.innerHTML =
+            "<label class='history-weather" + (snapshot.adverseWeather ? " is-checked" : "") + "'>" +
+              "<input type='checkbox' disabled" + (snapshot.adverseWeather ? " checked" : "") + " aria-label='" + escapeHtml(weatherLabel) + "'>" +
+              "<span>" + (snapshot.adverseWeather ? "No sailing" : "No") + "</span>" +
+            "</label>";
+          row.appendChild(weatherCell);
+
+          ["HV", "FO", "Overall"].forEach(function (metric) {
+            var cell = document.createElement("td");
+            var value = Number(snapshot[metric]);
+            var delta = previous ? value - Number(previous[metric]) : null;
+            cell.innerHTML =
+              "<span class='history-value'>" + value + "%</span>" +
+              formatDelta(delta);
+            row.appendChild(cell);
+          });
+
+          if (snapshot.note) row.title = snapshot.note;
+          body.appendChild(row);
+        });
+
+        if (!history.length) {
+          body.innerHTML = "<tr><td colspan='5'>No daily history recorded yet.</td></tr>";
+        }
+      }
+
+      function formatDelta(delta) {
+        if (delta === null || !Number.isFinite(delta)) {
+          return "<span class='pp-change pp-baseline'>baseline</span>";
+        }
+        var className = delta > 0 ? "pp-positive" : delta < 0 ? "pp-negative" : "pp-neutral";
+        var sign = delta > 0 ? "+" : "";
+        return "<span class='pp-change " + className + "'>" + sign + delta + " pp</span>";
       }
 
       function render() {
