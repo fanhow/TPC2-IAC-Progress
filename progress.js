@@ -6,7 +6,7 @@
     2. stage status values
     3. remaining
     4. note
-    5. history (append one snapshot per reporting day)
+    5. dailyProgress entries
 
   Allowed stage status values:
     "done"      = Completed
@@ -17,7 +17,7 @@
 
 window.progressData = {
   statusDate: "2026-08-28",
-  basisLabel: "No offshore activities due to adverse weather",
+  basisLabel: "7DLA dated 27 Aug · shift record updated 28 Aug",
 
   timeline: {
     start: "2026-08-21",
@@ -32,31 +32,17 @@ window.progressData = {
 
   cautions: {
     weather: "No offshore sailing is currently expected on 31 Aug and 1 Sep due to adverse weather and high waves. Activities planned for those dates cannot be treated as available working shifts.",
-    iac26: "FO is 95% complete. Splicing is complete; earth cable installation and cable taping remain outstanding.",
+    iac26: "Splicing/testing remains ongoing; test-data discrepancies require comparison and alignment with SCADA data.",
     nightShift: "Night work is currently expected only for this weekend. Night shifts after 30 Aug are not confirmed and remain subject to manpower and SOV availability."
   },
 
-  history: [
-    {
-      date: "2026-08-26",
-      HV: 53,
-      FO: 62,
-      Overall: 58,
-      note: "Baseline reconstructed from the last confirmed dashboard stage snapshot"
-    },
-    {
-      date: "2026-08-27",
-      HV: 55,
-      FO: 66,
-      Overall: 61,
-      note: "IAC09 L1 and L3 plugged in; IAC26 FO reported 95% complete"
-    },
+  dailyProgress: [
     {
       date: "2026-08-28",
-      HV: 55,
-      FO: 66,
-      Overall: 61,
-      note: "No offshore activities due to adverse weather; daily progress 0 pp"
+      adverseWeather: true,
+      progress: 0,
+      shiftStatus: "No offshore sailing",
+      note: "No offshore activities were carried out due to adverse weather."
     }
   ],
 
@@ -71,12 +57,12 @@ window.progressData = {
           softRouting: "done",
           corePrep: "done",
           heatShrink: "progress",
-          accessories: "progress",
-          plugIn: "progress",
+          accessories: "pending",
+          plugIn: "pending",
           closeOut: "pending"
         },
-        remaining: "Complete L2 termination and plug-in, followed by close-out",
-        note: "L1 and L3 are plugged in. L2 outer jacket peeling is complete."
+        remaining: "Planned through 28 Aug day shift; actual completion remains subject to progress",
+        note: "The latest 7DLA schedules HV terminations of String 3 on 27–28 Aug day shifts. The latest confirmed field update remains: L1 & L3 final heat shrinks applied; L2 exact status is not confirmed."
       },
       FO: {
         stages: {
@@ -220,15 +206,14 @@ window.progressData = {
           enclosurePrep: "done",
           cablePrep: "done",
           routingTrays: "done",
-          earthing: "progress",
+          earthing: "done",
           preTermTest: "done",
-          splicing: "done",
-          retestScada: "done",
-          closeOut: "progress"
+          splicing: "progress",
+          retestScada: "progress",
+          closeOut: "pending"
         },
-        reportedPercent: 95,
-        remaining: "Earth cable installation and cable taping",
-        note: "FO is 95% complete and splicing is 100% complete. Outstanding items are the earth cable and cable taping."
+        remaining: "Planned for 27–28 Aug day shifts, subject to weather and test resolution",
+        note: "The latest 7DLA continues FO terminations of String 6 on 27–28 Aug day shifts. The latest confirmed field update remains: 36 fibres spliced, with testing and SCADA data verification still ongoing after test-data discrepancies."
       }
     }
   ]
