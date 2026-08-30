@@ -1,4 +1,4 @@
-# TPC2 OSS — SPIE IAC Progress V3
+# TPC2 OSS — SPIE IAC Progress V4
 
 Static GitHub Pages dashboard for the five TPC2 OSS inter-array cables:
 
@@ -8,17 +8,30 @@ Static GitHub Pages dashboard for the five TPC2 OSS inter-array cables:
 - IAC22 / String 5
 - IAC26 / String 6
 
-The dashboard separates HV and FO workstreams, shows each stage status, calculates indicative row and overall progress, and keeps a daily HV, FO and Overall history with percentage-point changes.
+The dashboard separates HV and FO workstreams, shows each stage status, calculates indicative row and overall progress, and keeps a daily HV, FO and Overall history with percentage-point changes. It also includes a browser-side daily recap parser that can commit validated updates to GitHub.
 
 ## Files
 
 | File | Purpose | Normal daily action |
 |---|---|---|
 | **index.html** | Layout, styling and dashboard logic | Do not edit |
-| **progress.js** | Current status, daily history, remaining shifts and notes | Edit this file only |
+| **progress.js** | Current status, daily history, remaining shifts and notes | Updated by the website or manually |
+| **iac-string-mapping.svg** | North/South IAC and String reference | Do not edit unless the approved mapping changes |
 | **README.md** | Deployment and update instructions | Keep for reference |
 
 ## Daily update
+
+### Update from the website
+
+1. Open the public dashboard.
+2. Paste the latest day-shift or night-shift recap into the **Daily update** panel.
+3. Enter a fine-grained GitHub token with **Contents: read and write** access to `fanhow/TPC2-IAC-Progress`.
+4. Check the IAC/String mapping shown beside the form.
+5. Press **Update GitHub**.
+
+The token is used only by the current browser tab and is not written into `index.html`, `progress.js`, or the repository. The parser rejects mismatched IAC/String pairs.
+
+### Manual file update
 
 Open **progress.js** and update:
 
