@@ -29,7 +29,7 @@ The dashboard separates HV and FO workstreams, shows each stage status, calculat
 4. Check the IAC/String mapping shown beside the form.
 5. Press **Update GitHub**.
 
-The token is used only by the current browser tab and is not written into `index.html`, `progress.js`, or the repository. The parser rejects mismatched IAC/String pairs.
+The token is used only by the current browser tab and is not written into `index.html`, `progress.js`, or the repository. The parser rejects mismatched IAC/String pairs. Keep property names in `progress.js` quoted so the website can read the file safely without executing repository code.
 
 ### Manual file update
 
@@ -52,19 +52,19 @@ Allowed stage status values:
 
 Example:
 
-    HV: {
-      stages: {
-        cablePrep: "done",
-        hangOff: "done",
-        softRouting: "done",
-        corePrep: "done",
-        heatShrink: "progress",
-        accessories: "pending",
-        plugIn: "pending",
-        closeOut: "pending"
+    "HV": {
+      "stages": {
+        "cablePrep": "done",
+        "hangOff": "done",
+        "softRouting": "done",
+        "corePrep": "done",
+        "heatShrink": "progress",
+        "accessories": "pending",
+        "plugIn": "pending",
+        "closeOut": "pending"
       },
-      remaining: "4–5 active day shifts",
-      note: "L1 & L3 final heat shrinks applied."
+      "remaining": "4–5 active day shifts",
+      "note": "L1 & L3 final heat shrinks applied."
     }
 
 Do not change stage names such as **cablePrep** or **heatShrink**. Change only the value on the right. When a verified field percentage is available, such as FO 95%, **reportedPercent** may be used to override the stage-derived percentage.
@@ -96,7 +96,7 @@ Expected public URL:
 
 1. Open the repository on GitHub.
 2. Select **Add file → Upload files**.
-3. Upload **index.html**, **progress.js**, and **README.md** to the repository root.
+3. Upload **index.html**, **progress.js**, **iac-string-mapping.svg**, and **README.md** to the repository root.
 4. Commit the changes.
 5. Open **Settings → Pages**.
 6. Under **Build and deployment**, select **Deploy from a branch**.
