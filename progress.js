@@ -16,8 +16,8 @@
 */
 
 window.progressData = {
-  statusDate: "2026-08-28",
-  basisLabel: "No offshore activities due to adverse weather",
+  statusDate: "2026-08-30",
+  basisLabel: "Offshore field update 30 Aug 2026",
 
   timeline: {
     start: "2026-08-21",
@@ -60,6 +60,14 @@ window.progressData = {
       FO: 66,
       Overall: 61,
       note: "No offshore activities due to adverse weather; daily progress 0 pp"
+    },
+    {
+      date: "2026-08-30",
+      adverseWeather: false,
+      HV: 57,
+      FO: 67,
+      Overall: 62,
+      note: "IAC21/String 1 FO 50% complete; IAC09/String 3 L2 stripping and peeling complete; IAC17/String 2 straightening bars applied"
     }
   ],
 
@@ -79,7 +87,7 @@ window.progressData = {
           closeOut: "pending"
         },
         remaining: "Complete L2 termination and plug-in, followed by close-out",
-        note: "L1 and L3 are plugged in. L2 outer jacket peeling is complete."
+        note: "L1 and L3 are plugged in. L2 stripping and outer jacket peeling are complete."
       },
       FO: {
         stages: {
@@ -106,14 +114,14 @@ window.progressData = {
           cablePrep: "done",
           hangOff: "done",
           softRouting: "done",
-          corePrep: "tbc",
+          corePrep: "progress",
           heatShrink: "tbc",
           accessories: "tbc",
           plugIn: "pending",
           closeOut: "pending"
         },
-        remaining: "Weekend day shifts only before two expected no-sailing days; at least two shifts may roll over",
-        note: "The latest 7DLA schedules HV terminations of String 2 from 29 Aug to 1 Sep. No offshore sailing is currently expected on 31 Aug and 1 Sep due to high waves, so completion by 1 Sep is no longer a reliable assumption."
+        remaining: "Continue core preparation and HV termination works",
+        note: "Straightening bars applied to L1/L2/L3."
       },
       FO: {
         stages: {
@@ -161,8 +169,9 @@ window.progressData = {
           retestScada: "pending",
           closeOut: "pending"
         },
-        remaining: "At least 3–4 night shifts; weekend work remains weather-dependent and later nights are unconfirmed",
-        note: "The 7DLA schedules FO terminations of String 1 from the 30 Aug night shift onward. No offshore sailing is expected on 31 Aug and 1 Sep, and later night shifts are not confirmed due to manpower and SOV availability, so this scope may remain outstanding."
+        reportedPercent: 50,
+        remaining: "Continue FO termination and testing works",
+        note: "FO work on String 1 / IAC21 is 50% complete."
       }
     },
 
