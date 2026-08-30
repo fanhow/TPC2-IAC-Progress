@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" role="img" aria-labelledby="title desc">
+  <title id="title">TPC2 OSS IAC and String mapping</title>
+  <desc id="desc">North: IAC09 String 3, IAC17 String 2, IAC21 String 1. South: IAC26 String 6, IAC22 String 5, IAC10 String 4 energised.</desc>
+  <rect width="820" height="360" rx="20" fill="#071b2d"/>
+  <text x="48" y="58" fill="#45d5e8" font-family="Arial, sans-serif" font-size="24" font-weight="700">Cable deck reference</text>
+  <text x="48" y="112" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700">North</text>
+  <text x="48" y="164" fill="#9bb5c6" font-family="Arial, sans-serif" font-size="22" font-weight="700">IAC</text>
+  <text x="230" y="164" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">09</text>
+  <text x="370" y="164" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">17</text>
+  <text x="510" y="164" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">21</text>
+  <text x="48" y="210" fill="#9bb5c6" font-family="Arial, sans-serif" font-size="22" font-weight="700">String</text>
+  <text x="230" y="210" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">3</text>
+  <text x="370" y="210" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">2</text>
+  <text x="510" y="210" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">1</text>
+  <line x1="48" y1="245" x2="770" y2="245" stroke="#9abed8" stroke-opacity=".2"/>
+  <text x="48" y="294" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700">South</text>
+  <text x="48" y="338" fill="#9bb5c6" font-family="Arial, sans-serif" font-size="22" font-weight="700">IAC</text>
+  <text x="230" y="338" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">26</text>
+  <text x="370" y="338" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">22</text>
+  <text x="510" y="338" fill="#edf6fb" font-family="Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">10</text>
+  <text x="600" y="338" fill="#ffbd59" font-family="Arial, sans-serif" font-size="19" font-weight="700">(energised)</text>
+</svg>
