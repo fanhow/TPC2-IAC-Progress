@@ -314,6 +314,130 @@
       font-size: 0.79rem;
     }
 
+
+    .update-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 16px;
+      margin: 16px 0;
+      padding: 21px 22px;
+    }
+
+    .update-form { min-width: 0; }
+
+    .update-help {
+      margin: 8px 0 14px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .update-form textarea,
+    .update-form input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(4, 17, 30, 0.58);
+      color: var(--text);
+      padding: 11px 12px;
+      font: inherit;
+    }
+
+    .update-form textarea {
+      min-height: 165px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .update-form textarea:focus,
+    .update-form input:focus {
+      outline: 2px solid rgba(87, 215, 255, 0.5);
+      outline-offset: 1px;
+      border-color: var(--cyan);
+    }
+
+    .update-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .token-field small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1.35;
+    }
+
+    .update-button {
+      min-height: 43px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--cyan);
+      color: var(--navy-950);
+      cursor: pointer;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .update-button:hover { filter: brightness(1.08); }
+
+    .update-button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .update-status {
+      min-height: 1.3em;
+      margin: 12px 0 0;
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .update-status.success { color: var(--green); }
+    .update-status.error { color: var(--danger); }
+
+    .mapping-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(7, 27, 45, 0.45);
+    }
+
+    .mapping-card h3 {
+      margin: 4px 0 10px;
+      font-size: 1rem;
+    }
+
+    .mapping-card img {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--navy-900);
+    }
+
+    .mapping-card p:last-child {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
     .workspace { overflow: hidden; }
 
     .workspace-head {
@@ -714,7 +838,7 @@
     @media (max-width: 900px) {
       .topbar { flex-direction: column; }
       .date-panel { width: 100%; text-align: left; }
-      .hero-grid, .details-grid { grid-template-columns: 1fr; }
+      .hero-grid, .details-grid, .update-panel { grid-template-columns: 1fr; }
       .overall-card { min-height: 220px; }
     }
 
@@ -726,6 +850,9 @@
 
       h1 { font-size: 2.45rem; }
       .timeline-panel, .overall-card, .detail-card { padding: 18px; }
+      .update-panel { padding: 18px; }
+      .update-controls { grid-template-columns: 1fr; }
+      .update-button { width: 100%; }
       .workspace-head { align-items: stretch; padding: 14px; }
       .tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
       .tab { min-width: 0; }
@@ -782,6 +909,38 @@
           <p>Completed stages count fully; in-progress stages count halfway. TBC is intentionally not treated as complete.</p>
         </div>
       </article>
+    </section>
+
+    <section class="panel update-panel" aria-labelledby="update-title">
+      <div class="update-form">
+        <p class="section-kicker">Daily update</p>
+        <h2 class="panel-title" id="update-title">Paste today’s offshore recap</h2>
+        <p class="update-help">Paste the latest day-shift or night-shift message, check the detected IAC/String mapping, then commit the update to GitHub.</p>
+        <label class="field-label" for="recap-input">Daily recap</label>
+        <textarea id="recap-input" spellcheck="false" placeholder="8/30 Offshore Recap Day Shift:
+
+SPIE – OSS FO
+* IAC21 / String 1: 50% complete
+
+SPIE – OSS HV
+* IAC09 / String 3: L1 and L3 plugged in"></textarea>
+        <div class="update-controls">
+          <div class="token-field">
+            <label class="field-label" for="github-token">GitHub fine-grained token</label>
+            <input id="github-token" type="password" autocomplete="new-password" spellcheck="false" placeholder="Token with Contents read/write access">
+            <small>Used by this browser tab only. The dashboard does not save it in the repository.</small>
+          </div>
+          <button class="update-button" id="update-button" type="button">Update GitHub</button>
+        </div>
+        <p class="update-status" id="update-status" role="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="mapping-card" aria-labelledby="mapping-title">
+        <p class="section-kicker">Reference</p>
+        <h3 id="mapping-title">IAC / String mapping</h3>
+        <img src="./iac-string-mapping.svg" alt="North and South IAC and String mapping reference">
+        <p>Before pressing Update GitHub, please check that each IAC number matches the correct String.</p>
+      </aside>
     </section>
 
     <section class="panel workspace" aria-labelledby="matrix-title">
@@ -921,6 +1080,7 @@
       setupTimeline();
       bindTabs();
       renderHistory();
+      bindUpdatePanel();
       render();
 
       function formatIsoDate(value) {
@@ -984,6 +1144,473 @@
           return total;
         }, 0);
         return Math.round((points / stages.length) * 100);
+      }
+
+
+      function bindUpdatePanel() {
+        var recapInput = document.getElementById("recap-input");
+        var tokenInput = document.getElementById("github-token");
+        var button = document.getElementById("update-button");
+        var status = document.getElementById("update-status");
+
+        button.addEventListener("click", function () {
+          var recap = recapInput.value.trim();
+          var token = tokenInput.value.trim();
+          var parsed;
+
+          try {
+            parsed = parseRecap(recap);
+          } catch (error) {
+            setUpdateStatus(status, error.message || "The recap could not be understood.", true);
+            return;
+          }
+
+          if (!token) {
+            setUpdateStatus(status, "Enter a GitHub fine-grained token with Contents read/write access for this repository.", true);
+            tokenInput.focus();
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent = "Updating…";
+          setUpdateStatus(status, "Reading the current progress file and validating the recap…", false);
+
+          commitRecap(parsed, token)
+            .then(function (nextData) {
+              data = nextData;
+              document.getElementById("status-date").textContent =
+                "Status basis: " + formatIsoDate(data.statusDate) + (data.basisLabel ? " · " + data.basisLabel : "");
+              renderHistory();
+              render();
+              setUpdateStatus(status, "GitHub updated for " + formatIsoDate(parsed.date) + ". The public page may take a few seconds to refresh.", false);
+              status.classList.add("success");
+            })
+            .catch(function (error) {
+              setUpdateStatus(status, error.message || "GitHub update failed.", true);
+            })
+            .finally(function () {
+              button.disabled = false;
+              button.textContent = "Update GitHub";
+            });
+        });
+      }
+
+      function setUpdateStatus(element, message, isError) {
+        element.textContent = message;
+        element.className = "update-status" + (isError ? " error" : "");
+      }
+
+      function parseRecap(rawText) {
+        if (!rawText || !rawText.trim()) {
+          throw new Error("Paste a daily recap before pressing Update GitHub.");
+        }
+
+        var text = rawText.trim();
+        var date = parseReportingDate(text);
+        var iacToString = {
+          IAC09: "String 3",
+          IAC17: "String 2",
+          IAC21: "String 1",
+          IAC26: "String 6",
+          IAC22: "String 5",
+          IAC10: "String 4"
+        };
+        var stringToIac = {
+          "String 1": "IAC21",
+          "String 2": "IAC17",
+          "String 3": "IAC09",
+          "String 4": "IAC10",
+          "String 5": "IAC22",
+          "String 6": "IAC26"
+        };
+        var activeWorkstream = null;
+        var activeTarget = null;
+        var updates = {};
+        var lines = text.split(/\r?\n/);
+
+        function getTarget(line) {
+          var iacMatch = line.match(/\bIAC\s*0?(\d{1,2})\b/i);
+          var stringMatch = line.match(/\bString\s*([1-6])\b/i);
+          if (!iacMatch && !stringMatch) return null;
+
+          var iacId = iacMatch ? "IAC" + String(Number(iacMatch[1])).padStart(2, "0") : null;
+          var stringName = stringMatch ? "String " + Number(stringMatch[1]) : null;
+
+          if (iacId && !Object.prototype.hasOwnProperty.call(iacToString, iacId)) {
+            throw new Error("Unknown IAC number: " + iacId + ".");
+          }
+          if (stringName && !Object.prototype.hasOwnProperty.call(stringToIac, stringName)) {
+            throw new Error("Unknown String number: " + stringName + ".");
+          }
+          if (iacId && stringName && iacToString[iacId] !== stringName) {
+            throw new Error("Mapping mismatch: " + iacId + " is " + iacToString[iacId] + ", not " + stringName + ".");
+          }
+
+          if (!iacId) iacId = stringToIac[stringName];
+          if (!stringName) stringName = iacToString[iacId];
+
+          return { iacId: iacId, stringName: stringName };
+        }
+
+        function stripTargetIdentifiers(line) {
+          return line
+            .replace(/\bIAC\s*0?\d{1,2}\b/ig, "")
+            .replace(/\bString\s*[1-6]\b/ig, "")
+            .replace(/^[\s\-:\/|]+|[\s\-:\/|]+$/g, "")
+            .trim();
+        }
+
+        function extractWorkstream(line) {
+          var match = line.match(/\b(HV|FO)\b/i);
+          return match ? match[1].toUpperCase() : null;
+        }
+
+        function addUpdate(workstream, target, line) {
+          var key = workstream + ":" + target.iacId;
+          if (!updates[key]) {
+            updates[key] = {
+              workstream: workstream,
+              iacId: target.iacId,
+              stringName: target.stringName,
+              lines: [],
+              percent: null
+            };
+          }
+          updates[key].lines.push(line);
+          var percent = parseOverallPercentage(line);
+          if (percent !== null) {
+            if (updates[key].percent !== null && updates[key].percent !== percent) {
+              throw new Error("Conflicting overall percentages for " + target.iacId + " / " + target.stringName + ".");
+            }
+            updates[key].percent = percent;
+          }
+        }
+
+        lines.forEach(function (rawLine) {
+          var line = rawLine
+            .replace(/[–—−]/g, "-")
+            .replace(/^\s*(?:[-*•>]+\s*)+/, "")
+            .trim();
+
+          if (!line) return;
+
+          var heading = line.match(/^(?:SPIE\s*-\s*)?(?:OSS\s*)?(HV|FO)\b/i);
+          var target = getTarget(line);
+          var explicitWorkstream = extractWorkstream(line);
+
+          if (heading && !target) {
+            activeWorkstream = heading[1].toUpperCase();
+            activeTarget = null;
+            return;
+          }
+
+          if (target) {
+            if (explicitWorkstream) activeWorkstream = explicitWorkstream;
+            if (!activeWorkstream) {
+              throw new Error("Add an HV or FO heading before this line: " + line);
+            }
+
+            var remainder = stripTargetIdentifiers(line);
+            activeTarget = target;
+            if (!remainder) return;
+            addUpdate(activeWorkstream, target, line);
+            return;
+          }
+
+          if (activeTarget && activeWorkstream) {
+            addUpdate(activeWorkstream, activeTarget, line);
+            return;
+          }
+
+          if (/%|plugged|stripp|peel|straighten|splic|earth|tape|complete|outstanding/i.test(line)) {
+            throw new Error("Could not identify the IAC and String for: " + line);
+          }
+        });
+
+        var weatherMention = /\b(adverse weather|high waves|rough seas|strong wind|heavy rain)\b/i.test(text);
+        var noSailing = /\b(?:no|without)\s+(?:offshore\s+)?(?:activities|activity|sailing|work|operations)\b|\b(?:did not|could not|unable to)\s+(?:go\s+)?offshore\b|\bno offshore\b/i.test(text);
+        var adverseWeather = (weatherMention && noSailing) || /\bdaily progress\s*:?\s*0\s*pp?\b/i.test(text);
+        var updateList = Object.keys(updates).map(function (key) { return updates[key]; });
+
+        if (!updateList.length && !adverseWeather) {
+          throw new Error("No IAC/String progress item was found. Include an IAC/String line or an adverse-weather no-sailing note.");
+        }
+
+        var summary = updateList.length
+          ? updateList.map(function (item) {
+              return item.workstream + " " + item.iacId + " / " + item.stringName + ": " + item.lines.join(" ");
+            }).join("; ")
+          : "No offshore activities due to adverse weather; daily progress 0 pp";
+
+        return {
+          date: date,
+          adverseWeather: adverseWeather,
+          updates: updateList,
+          note: summary
+        };
+      }
+
+      function parseOverallPercentage(line) {
+        var match = line.match(/(\d+(?:\.\d+)?)\s*%/);
+        if (!match) return null;
+
+        var beforePercent = line.slice(0, match.index).toLowerCase();
+        var lower = line.toLowerCase();
+        var substage = /\b(?:splicing|splice|testing|test|termination|pre[- ]?term|earthing|earth|taping|tape|cable)\b/i.test(beforePercent);
+        var hasOverallContext = /\b(?:complete|completed|progress|overall)\b/i.test(lower) || !substage;
+        if (substage || !hasOverallContext) return null;
+
+        var value = Number(match[1]);
+        if (!Number.isFinite(value) || value < 0 || value > 100) {
+          throw new Error("Percentage must be between 0 and 100: " + match[1] + "%.");
+        }
+        return Math.round(value);
+      }
+
+      function parseReportingDate(text) {
+        var iso = text.match(/\b(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})\b/);
+        if (iso) return makeIsoDate(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+
+        var slash = text.match(/\b(\d{1,2})\/(\d{1,2})\b/);
+        if (slash) return makeIsoDate(currentDate.getFullYear(), Number(slash[1]), Number(slash[2]));
+
+        var named = text.match(/\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)(?:\s+(20\d{2}))?\b/i);
+        if (named) {
+          return makeIsoDate(named[3] ? Number(named[3]) : currentDate.getFullYear(), monthNumber(named[2]), Number(named[1]));
+        }
+
+        var namedReversed = text.match(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2})(?:,?\s+(20\d{2}))?\b/i);
+        if (namedReversed) {
+          return makeIsoDate(namedReversed[3] ? Number(namedReversed[3]) : currentDate.getFullYear(), monthNumber(namedReversed[1]), Number(namedReversed[2]));
+        }
+
+        return makeIsoDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+      }
+
+      function monthNumber(value) {
+        var shortName = value.slice(0, 3).toLowerCase();
+        var months = {
+          jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
+          jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12
+        };
+        return months[shortName];
+      }
+
+      function makeIsoDate(year, month, day) {
+        var candidate = new Date(year, month - 1, day);
+        if (
+          candidate.getFullYear() !== year ||
+          candidate.getMonth() !== month - 1 ||
+          candidate.getDate() !== day
+        ) {
+          throw new Error("Invalid reporting date.");
+        }
+        return [
+          candidate.getFullYear(),
+          String(candidate.getMonth() + 1).padStart(2, "0"),
+          String(candidate.getDate()).padStart(2, "0")
+        ].join("-");
+      }
+
+      function commitRecap(parsed, token) {
+        var repository = "fanhow/TPC2-IAC-Progress";
+        var fileUrl = "https://api.github.com/repos/" + repository + "/contents/progress.js";
+        var headers = {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer " + token,
+          "X-GitHub-Api-Version": "2022-11-28"
+        };
+
+        return fetch(fileUrl, { headers: headers })
+          .then(function (response) {
+            return response.json().then(function (payload) {
+              if (!response.ok) {
+                throw new Error("GitHub read failed (" + response.status + "): " + (payload.message || "check the token permissions."));
+              }
+              return payload;
+            });
+          })
+          .then(function (payload) {
+            if (!payload.content || !payload.sha) {
+              throw new Error("GitHub returned no usable progress.js content.");
+            }
+            var remoteData = parseProgressFile(decodeBase64(payload.content));
+            var nextData = applyParsedRecap(remoteData, parsed);
+            var serialized = serializeProgressData(nextData);
+            return fetch(fileUrl, {
+              method: "PUT",
+              headers: Object.assign({}, headers, { "Content-Type": "application/json" }),
+              body: JSON.stringify({
+                message: "Update SPIE progress - " + formatIsoDate(parsed.date),
+                content: encodeBase64(serialized),
+                sha: payload.sha
+              })
+            }).then(function (response) {
+              return response.json().then(function (result) {
+                if (!response.ok) {
+                  throw new Error("GitHub write failed (" + response.status + "): " + (result.message || "check the token permissions."));
+                }
+                return nextData;
+              });
+            });
+          });
+      }
+
+      function parseProgressFile(content) {
+        var marker = "window.progressData =";
+        var markerIndex = content.indexOf(marker);
+        if (markerIndex < 0) {
+          throw new Error("The GitHub progress.js file is not in the expected format.");
+        }
+        var json = content.slice(markerIndex + marker.length).trim();
+        if (json.charAt(json.length - 1) === ";") json = json.slice(0, -1).trim();
+        var parsed = JSON.parse(json);
+        if (!parsed || !Array.isArray(parsed.iacs)) {
+          throw new Error("The GitHub progress.js file does not contain valid progress data.");
+        }
+        return parsed;
+      }
+
+      function decodeBase64(value) {
+        var binary = atob(value.replace(/\s/g, ""));
+        var bytes = new Uint8Array(binary.length);
+        for (var index = 0; index < binary.length; index += 1) {
+          bytes[index] = binary.charCodeAt(index);
+        }
+        return new TextDecoder("utf-8").decode(bytes);
+      }
+
+      function encodeBase64(value) {
+        var bytes = new TextEncoder().encode(value);
+        var binary = "";
+        for (var index = 0; index < bytes.length; index += 1) {
+          binary += String.fromCharCode(bytes[index]);
+        }
+        return btoa(binary);
+      }
+
+      function applyParsedRecap(sourceData, parsed) {
+        var nextData = JSON.parse(JSON.stringify(sourceData));
+        var iacToString = {
+          IAC09: "String 3",
+          IAC17: "String 2",
+          IAC21: "String 1",
+          IAC26: "String 6",
+          IAC22: "String 5",
+          IAC10: "String 4"
+        };
+
+        parsed.updates.forEach(function (update) {
+          var iac = nextData.iacs.find(function (item) { return item.id === update.iacId; });
+          if (!iac) throw new Error("Could not find " + update.iacId + " in progress.js.");
+          if (iac.string !== iacToString[update.iacId]) {
+            throw new Error("The GitHub data mapping for " + update.iacId + " does not match the approved mapping.");
+          }
+
+          var workstream = iac[update.workstream];
+          if (!workstream || !workstream.stages) {
+            throw new Error("The " + update.workstream + " workstream is missing for " + update.iacId + ".");
+          }
+
+          var lower = update.lines.join(" ").toLowerCase();
+
+          if (update.percent !== null) {
+            workstream.reportedPercent = update.percent;
+          }
+
+          if (update.workstream === "HV") {
+            if (/\bplugged?\s*(?:in)?\b/i.test(lower)) {
+              var allThree = /\bl1\s*[/,&]\s*l2\s*[/,&]\s*l3\b[^.]*plug/i.test(lower) ||
+                /\bl1\b[^.]*\bl2\b[^.]*\bl3\b[^.]*plug/i.test(lower);
+              workstream.stages.plugIn = allThree ? "done" : "progress";
+            }
+            if (/\b(?:l2\b[^.]*stripp|l2\b[^.]*peel|outer\s+jacket[^.]*peel|jacket[^.]*peel)/i.test(lower)) {
+              workstream.stages.corePrep = "done";
+            }
+            if (/\bstraightening\s+bars?|bars?\s+(?:applied|installed)/i.test(lower)) {
+              workstream.stages.corePrep = "progress";
+            }
+          } else {
+            if (/\bsplic/i.test(lower) && /(?:100\s*%|\bcomplete\b|\bdone\b)/i.test(lower)) {
+              workstream.stages.splicing = "done";
+            }
+            if (/\b(?:earth|earthing)\b/i.test(lower)) {
+              workstream.stages.earthing = /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress";
+            }
+            if (/\b(?:tape|taping)\b/i.test(lower)) {
+              workstream.stages.closeOut = /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress";
+            }
+          }
+
+          if (update.iacId === "IAC26" && update.workstream === "FO" && update.percent !== null &&
+              /\bsplic/i.test(lower) && /\b(?:earth|earthing|tape|taping)\b/i.test(lower)) {
+            workstream.note = "FO is " + update.percent + "% complete and splicing is 100% complete. Outstanding items are the earth cable and cable taping.";
+            workstream.remaining = "Earth cable installation and cable taping";
+          } else if (update.iacId === "IAC21" && update.workstream === "FO" && update.percent !== null) {
+            workstream.note = "FO work on " + update.stringName + " / " + update.iacId + " is " + update.percent + "% complete.";
+            workstream.remaining = update.percent >= 100 ? "Complete remaining FO close-out and testing works" : "Continue FO termination and testing works";
+          } else if (update.iacId === "IAC09" && update.workstream === "HV" &&
+              /\bl1\b[^.]*\bl3\b[^.]*plug/i.test(lower) && /\bl2\b[^.]*\b(?:stripp|peel)/i.test(lower)) {
+            workstream.note = "L1 and L3 are plugged in. L2 stripping and outer jacket peeling are complete.";
+          } else if (update.iacId === "IAC17" && update.workstream === "HV" &&
+              /straightening\s+bars?/i.test(lower)) {
+            workstream.note = "Straightening bars applied to L1/L2/L3.";
+          } else {
+            workstream.note = update.lines.join(" ");
+          }
+        });
+
+        var history = Array.isArray(nextData.history) ? nextData.history.slice() : [];
+        var existingIndex = history.findIndex(function (snapshot) { return snapshot.date === parsed.date; });
+        var previousCandidates = history
+          .filter(function (snapshot) { return snapshot.date !== parsed.date && utcDay(snapshot.date) < utcDay(parsed.date); })
+          .sort(function (a, b) { return utcDay(a.date) - utcDay(b.date); });
+        var previous = previousCandidates.length
+          ? previousCandidates[previousCandidates.length - 1]
+          : (existingIndex >= 0 ? history[existingIndex] : null);
+
+        var hv = parsed.adverseWeather && !parsed.updates.length && previous
+          ? Number(previous.HV)
+          : calculateMetric(nextData, "HV");
+        var fo = parsed.adverseWeather && !parsed.updates.length && previous
+          ? Number(previous.FO)
+          : calculateMetric(nextData, "FO");
+        var overall = parsed.adverseWeather && !parsed.updates.length && previous
+          ? Number(previous.Overall)
+          : Math.round((hv + fo) / 2);
+
+        var entry = {
+          date: parsed.date,
+          adverseWeather: Boolean(parsed.adverseWeather),
+          HV: hv,
+          FO: fo,
+          Overall: overall,
+          note: parsed.note
+        };
+
+        if (existingIndex >= 0) history[existingIndex] = entry;
+        else history.push(entry);
+        history.sort(function (a, b) { return utcDay(a.date) - utcDay(b.date); });
+        nextData.history = history;
+
+        if (!nextData.statusDate || utcDay(parsed.date) >= utcDay(nextData.statusDate)) {
+          nextData.statusDate = parsed.date;
+          nextData.basisLabel = "Offshore field update " + formatIsoDate(parsed.date);
+        }
+        return nextData;
+      }
+
+      function calculateMetric(progressData, workstreamName) {
+        var stages = stageDefinitions[workstreamName];
+        var total = progressData.iacs.reduce(function (sum, iac) {
+          return sum + calculateProgress(iac[workstreamName], stages);
+        }, 0);
+        return progressData.iacs.length ? Math.round(total / progressData.iacs.length) : 0;
+      }
+
+      function serializeProgressData(progressData) {
+        return "/* TPC2 SPIE IAC Progress — daily update file */\n\nwindow.progressData = " +
+          JSON.stringify(progressData, null, 2) + ";\n";
       }
 
       function renderHistory() {
