@@ -1,81 +1,95 @@
-/*
-  TPC2 SPIE IAC Progress — browser-only GitHub token persistence
-
-  The token is saved only in this browser's localStorage for this GitHub Pages
-  origin. It is never written into progress.js or committed to the repository.
-*/
-(function () {
+(function installTokenPersistence() {
   "use strict";
 
   var storageKey = "tpc2-iac-progress.githubToken";
   var tokenInput = document.getElementById("github-token");
 
-  if (!tokenInput) return;
-
-  try {
-    var savedToken = window.localStorage.getItem(storageKey);
-    if (savedToken) tokenInput.value = savedToken;
-  } catch (error) {
-    // Continue without persistence if localStorage is unavailable.
-  }
-
-  var helper = tokenInput.parentElement ? tokenInput.parentElement.querySelector("small") : null;
-  if (helper) {
-    helper.textContent = "Saved only in this browser/device. It is not written to the GitHub repository. Clear this field to forget it.";
-  }
-
-  tokenInput.addEventListener("input", function () {
+  if (tokenInput) {
     try {
-      var token = tokenInput.value.trim();
-      if (token) {
-        window.localStorage.setItem(storageKey, token);
-      } else {
-        window.localStorage.removeItem(storageKey);
-      }
+      var savedToken = window.localStorage.getItem(storageKey);
+      if (savedToken) tokenInput.value = savedToken;
     } catch (error) {
-      // The update button can still use the token for this tab even if storage fails.
+      // Continue without persistence if localStorage is unavailable.
     }
-  });
+
+    var helper = tokenInput.parentElement ? tokenInput.parentElement.querySelector("small") : null;
+    if (helper) {
+      helper.textContent = "Saved only in this browser/device. It is not written to the GitHub repository. Clear this field to forget it.";
+    }
+
+    tokenInput.addEventListener("input", function () {
+      try {
+        var token = tokenInput.value.trim();
+        if (token) window.localStorage.setItem(storageKey, token);
+        else window.localStorage.removeItem(storageKey);
+      } catch (error) {
+        // Update still works for this tab if storage is unavailable.
+      }
+    });
+  }
+
+  if (!window.fetch.__tpc2TokenPersistence) {
+    var nativeFetch = window.fetch.bind(window);
+
+    var wrappedFetch = function (input, init) {
+      var url = typeof input === "string" ? input : (input && input.url ? input.url : "");
+      var method = init && init.method ? String(init.method).toUpperCase() : "GET";
+
+      if (
+        method === "PUT" &&
+        /api\.github\.com\/repos\/fanhow\/TPC2-IAC-Progress\/contents\/progress\.js(?:\?|$)/i.test(url) &&
+        init && typeof init.body === "string"
+      ) {
+        try {
+          var requestBody = JSON.parse(init.body);
+          if (requestBody.content) {
+            var binary = atob(String(requestBody.content).replace(/\s/g, ""));
+            var bytes = new Uint8Array(binary.length);
+            for (var i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+            var decoded = new TextDecoder("utf-8").decode(bytes);
+
+            var preamble = "(" + installTokenPersistence.toString() + ")();\n\n";
+            var nextText = preamble + decoded;
+            var encodedBytes = new TextEncoder().encode(nextText);
+            var encodedBinary = "";
+            for (var j = 0; j < encodedBytes.length; j += 1) {
+              encodedBinary += String.fromCharCode(encodedBytes[j]);
+            }
+            requestBody.content = btoa(encodedBinary);
+            init = Object.assign({}, init, { body: JSON.stringify(requestBody) });
+          }
+        } catch (error) {
+          // Fall back to the original request if preservation fails.
+        }
+      }
+
+      return nativeFetch(input, init);
+    };
+
+    wrappedFetch.__tpc2TokenPersistence = true;
+    window.fetch = wrappedFetch;
+  }
 })();
 
-/*
-  TPC2 SPIE IAC Progress — daily update file
-
-  Edit only:
-    1. statusDate
-    2. stage status values
-    3. remaining
-    4. note
-    5. history (append one snapshot per reporting day)
-
-  Allowed stage status values:
-    "done"      = Completed
-    "progress"  = In Progress
-    "pending"   = Pending / not started
-    "tbc"       = Not confirmed by available records
-*/
+/* TPC2 SPIE IAC Progress — daily update file */
 
 window.progressData = {
   "statusDate": "2026-08-30",
   "basisLabel": "Offshore field update 30 Aug 2026",
-
   "timeline": {
     "start": "2026-08-21",
     "endExclusive": "2026-09-13"
   },
-
   "forecast": {
     "start": "2026-09-06",
     "endExclusive": "2026-09-13",
     "label": "6–12 Sep 2026, possibly later"
   },
-
   "cautions": {
     "weather": "No offshore sailing is currently expected on 31 Aug and 1 Sep due to adverse weather and high waves. Activities planned for those dates cannot be treated as available working shifts.",
     "iac26": "FO is 95% complete. Splicing is complete; earth cable installation and cable taping remain outstanding.",
     "nightShift": "Night work is currently expected only for this weekend. Night shifts after 30 Aug are not confirmed and remain subject to manpower and SOV availability."
   },
-
   "history": [
     {
       "date": "2026-08-26",
@@ -110,7 +124,6 @@ window.progressData = {
       "note": "IAC21/String 1 FO 50% complete; IAC09/String 3 L2 stripping and peeling complete; IAC17/String 2 straightening bars applied"
     }
   ],
-
   "iacs": [
     {
       "id": "IAC09",
@@ -145,7 +158,6 @@ window.progressData = {
         "note": "The latest 7DLA schedules FO terminations of String 3 from 29 Aug to 2 Sep day shifts. No offshore sailing is currently expected on 31 Aug and 1 Sep due to high waves, and later night-shift support is not confirmed."
       }
     },
-
     {
       "id": "IAC17",
       "string": "String 2",
@@ -179,7 +191,6 @@ window.progressData = {
         "note": "FO testing was previously reported completed. A String 2 earthing arrangement appears on the 2 Sep night plan, but its workstream and shift availability are not confirmed."
       }
     },
-
     {
       "id": "IAC21",
       "string": "String 1",
@@ -214,7 +225,6 @@ window.progressData = {
         "note": "FO work on String 1 / IAC21 is 50% complete."
       }
     },
-
     {
       "id": "IAC22",
       "string": "String 5",
@@ -248,7 +258,6 @@ window.progressData = {
         "note": "Earlier records show FO pre-term work completed for String 5 / IAC22. The latest 7DLA shows a String 5 earthing arrangement on the 30 Aug night shift; later close-out status is not confirmed."
       }
     },
-
     {
       "id": "IAC26",
       "string": "String 6",
