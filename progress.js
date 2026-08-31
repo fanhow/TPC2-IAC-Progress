@@ -1,4 +1,44 @@
 /*
+  TPC2 SPIE IAC Progress — browser-only GitHub token persistence
+
+  The token is saved only in this browser's localStorage for this GitHub Pages
+  origin. It is never written into progress.js or committed to the repository.
+*/
+(function () {
+  "use strict";
+
+  var storageKey = "tpc2-iac-progress.githubToken";
+  var tokenInput = document.getElementById("github-token");
+
+  if (!tokenInput) return;
+
+  try {
+    var savedToken = window.localStorage.getItem(storageKey);
+    if (savedToken) tokenInput.value = savedToken;
+  } catch (error) {
+    // Continue without persistence if localStorage is unavailable.
+  }
+
+  var helper = tokenInput.parentElement ? tokenInput.parentElement.querySelector("small") : null;
+  if (helper) {
+    helper.textContent = "Saved only in this browser/device. It is not written to the GitHub repository. Clear this field to forget it.";
+  }
+
+  tokenInput.addEventListener("input", function () {
+    try {
+      var token = tokenInput.value.trim();
+      if (token) {
+        window.localStorage.setItem(storageKey, token);
+      } else {
+        window.localStorage.removeItem(storageKey);
+      }
+    } catch (error) {
+      // The update button can still use the token for this tab even if storage fails.
+    }
+  });
+})();
+
+/*
   TPC2 SPIE IAC Progress — daily update file
 
   Edit only:
