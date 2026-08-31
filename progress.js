@@ -74,8 +74,8 @@
 /* TPC2 SPIE IAC Progress — daily update file */
 
 window.progressData = {
-  "statusDate": "2026-08-30",
-  "basisLabel": "Offshore field update 30 Aug 2026",
+  "statusDate": "2026-08-31",
+  "basisLabel": "Offshore field update 31 Aug 2026",
   "timeline": {
     "start": "2026-08-21",
     "endExclusive": "2026-09-13"
@@ -122,6 +122,14 @@ window.progressData = {
       "FO": 67,
       "Overall": 62,
       "note": "IAC21/String 1 FO 50% complete; IAC09/String 3 L2 stripping and peeling complete; IAC17/String 2 straightening bars applied"
+    },
+    {
+      "date": "2026-08-31",
+      "adverseWeather": false,
+      "HV": 58,
+      "FO": 58,
+      "Overall": 58,
+      "note": "FO IAC26 / String 6: String 6 / IAC26: 75% complete; FO IAC09 / String 3: ⁠String 3 / IAC09: 10%; HV IAC09 / String 3: String 3 / IAC09: L1, L2 and L3 plugged in. L2 shrink tube heating to be started, and all bonding cables to be installed.; HV IAC17 / String 2: String 2 / IAC17: L1/L2/L3 ready for termination"
     }
   ],
   "iacs": [
@@ -136,11 +144,11 @@ window.progressData = {
           "corePrep": "done",
           "heatShrink": "progress",
           "accessories": "progress",
-          "plugIn": "progress",
+          "plugIn": "done",
           "closeOut": "pending"
         },
         "remaining": "Complete L2 termination and plug-in, followed by close-out",
-        "note": "L1 and L3 are plugged in. L2 stripping and outer jacket peeling are complete."
+        "note": "String 3 / IAC09: L1, L2 and L3 plugged in. L2 shrink tube heating to be started, and all bonding cables to be installed."
       },
       "FO": {
         "stages": {
@@ -155,7 +163,8 @@ window.progressData = {
           "closeOut": "pending"
         },
         "remaining": "Planned from 29 Aug, but 31 Aug–1 Sep are expected no-sailing days; completion may move later",
-        "note": "The latest 7DLA schedules FO terminations of String 3 from 29 Aug to 2 Sep day shifts. No offshore sailing is currently expected on 31 Aug and 1 Sep due to high waves, and later night-shift support is not confirmed."
+        "note": "⁠String 3 / IAC09: 10%",
+        "reportedPercent": 10
       }
     },
     {
@@ -173,7 +182,7 @@ window.progressData = {
           "closeOut": "pending"
         },
         "remaining": "Continue core preparation and HV termination works",
-        "note": "Straightening bars applied to L1/L2/L3."
+        "note": "String 2 / IAC17: L1/L2/L3 ready for termination"
       },
       "FO": {
         "stages": {
@@ -287,9 +296,9 @@ window.progressData = {
           "retestScada": "done",
           "closeOut": "progress"
         },
-        "reportedPercent": 95,
+        "reportedPercent": 75,
         "remaining": "Earth cable installation and cable taping",
-        "note": "FO is 95% complete and splicing is 100% complete. Outstanding items are the earth cable and cable taping."
+        "note": "String 6 / IAC26: 75% complete"
       }
     }
   ]
