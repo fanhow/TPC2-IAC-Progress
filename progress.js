@@ -125,11 +125,11 @@ window.progressData = {
     },
     {
       "date": "2026-08-31",
-      "adverseWeather": true,
-      "HV": 57,
-      "FO": 67,
-      "Overall": 62,
-      "note": "No offshore activities due to adverse weather; daily progress 0 pp"
+      "adverseWeather": false,
+      "HV": 58,
+      "FO": 58,
+      "Overall": 58,
+      "note": "FO IAC26 / String 6: String 6 / IAC26: 75% complete; FO IAC09 / String 3: ⁠String 3 / IAC09: 10%; HV IAC09 / String 3: String 3 / IAC09: L1, L2 and L3 plugged in. L2 shrink tube heating to be started, and all bonding cables to be installed.; HV IAC17 / String 2: String 2 / IAC17: L1/L2/L3 ready for termination"
     },
     {
       "date": "2026-09-01",
