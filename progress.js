@@ -74,8 +74,8 @@
 /* TPC2 SPIE IAC Progress — daily update file */
 
 window.progressData = {
-  "statusDate": "2026-08-31",
-  "basisLabel": "Offshore field update 31 Aug 2026",
+  "statusDate": "2026-09-01",
+  "basisLabel": "Offshore field update 01 Sept 2026",
   "timeline": {
     "start": "2026-08-21",
     "endExclusive": "2026-09-13"
@@ -125,6 +125,14 @@ window.progressData = {
     },
     {
       "date": "2026-08-31",
+      "adverseWeather": true,
+      "HV": 57,
+      "FO": 67,
+      "Overall": 62,
+      "note": "No offshore activities due to adverse weather; daily progress 0 pp"
+    },
+    {
+      "date": "2026-09-01",
       "adverseWeather": true,
       "HV": 57,
       "FO": 67,
