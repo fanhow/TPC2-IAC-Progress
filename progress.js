@@ -134,9 +134,9 @@ window.progressData = {
     {
       "date": "2026-09-01",
       "adverseWeather": true,
-      "HV": 57,
-      "FO": 67,
-      "Overall": 62,
+      "HV": 58,
+      "FO": 58,
+      "Overall": 58,
       "note": "No offshore activities due to adverse weather; daily progress 0 pp"
     }
   ],
