@@ -770,6 +770,54 @@
 
     .history-table tbody td { background: rgba(7, 27, 45, 0.34); }
 
+    .history-month-row th {
+      padding: 10px 16px;
+      background: rgba(12, 41, 66, 0.92);
+      text-align: left;
+    }
+
+    .history-month-toggle {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      padding: 0;
+      border: 0;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .history-month-toggle:hover { color: var(--cyan); }
+
+    .history-month-chevron {
+      display: inline-block;
+      width: 1rem;
+      color: var(--cyan);
+      font-size: 1rem;
+      line-height: 1;
+      transform: rotate(0deg);
+      transition: transform 160ms ease;
+    }
+
+    .history-month-row.is-collapsed .history-month-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .history-month-label {
+      font-size: 0.82rem;
+      font-weight: 850;
+      letter-spacing: 0.03em;
+    }
+
+    .history-month-count {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 750;
+    }
+
     .history-value {
       color: var(--text);
       font-size: 0.94rem;
@@ -975,7 +1023,7 @@ SPIE – OSS HV
           <p class="section-kicker">Daily progress history</p>
           <h2 class="panel-title" id="history-title">HV, FO and Overall</h2>
         </div>
-        <p class="history-note">Adverse-weather days are checked and retain the previous cumulative percentages, producing 0 pp daily progress.</p>
+        <p class="history-note">Adverse-weather days are checked and retain the previous cumulative percentages, producing 0 pp daily progress. Click a month to expand or collapse its records.</p>
       </div>
       <div class="history-wrap">
         <table class="history-table" aria-label="Daily HV, FO and overall progress history">
@@ -1618,40 +1666,96 @@ SPIE – OSS HV
         var history = Array.isArray(data.history) ? data.history : [];
         body.innerHTML = "";
 
+        var groups = [];
+        var groupLookup = {};
         history.forEach(function (snapshot, index) {
-          var previous = index > 0 ? history[index - 1] : null;
-          var row = document.createElement("tr");
-          var dateCell = document.createElement("th");
-          dateCell.scope = "row";
-          dateCell.textContent = formatIsoDate(snapshot.date);
-          row.appendChild(dateCell);
+          var monthKey = snapshot.date.slice(0, 7);
+          if (!groupLookup[monthKey]) {
+            groupLookup[monthKey] = { key: monthKey, entries: [] };
+            groups.push(groupLookup[monthKey]);
+          }
+          groupLookup[monthKey].entries.push({ snapshot: snapshot, index: index });
+        });
 
-          ["HV", "FO", "Overall"].forEach(function (metric) {
-            var cell = document.createElement("td");
-            var value = Number(snapshot[metric]);
-            var delta = previous ? value - Number(previous[metric]) : null;
-            cell.innerHTML =
-              "<span class='history-value'>" + value + "%</span>" +
-              formatDelta(delta);
-            row.appendChild(cell);
+        var currentMonthKey = currentDate.getFullYear() + "-" + String(currentDate.getMonth() + 1).padStart(2, "0");
+        var hasCurrentMonth = groups.some(function (group) { return group.key === currentMonthKey; });
+        var fallbackMonthKey = groups.length ? groups[groups.length - 1].key : null;
+
+        groups.forEach(function (group) {
+          var expandedByDefault = group.key === (hasCurrentMonth ? currentMonthKey : fallbackMonthKey);
+          var monthRow = document.createElement("tr");
+          monthRow.className = "history-month-row" + (expandedByDefault ? "" : " is-collapsed");
+          var monthCell = document.createElement("th");
+          monthCell.scope = "colgroup";
+          monthCell.colSpan = 5;
+
+          var toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "history-month-toggle";
+          toggle.setAttribute("aria-expanded", String(expandedByDefault));
+          toggle.setAttribute("aria-label", (expandedByDefault ? "Collapse " : "Expand ") + formatHistoryMonth(group.key));
+          toggle.innerHTML =
+            "<span class='history-month-chevron' aria-hidden='true'>▾</span>" +
+            "<span class='history-month-label'>" + escapeHtml(formatHistoryMonth(group.key)) + "</span>" +
+            "<span class='history-month-count'>" + group.entries.length + (group.entries.length === 1 ? " day" : " days") + "</span>";
+          monthCell.appendChild(toggle);
+          monthRow.appendChild(monthCell);
+          body.appendChild(monthRow);
+
+          var dayRows = [];
+          group.entries.forEach(function (entry) {
+            var snapshot = entry.snapshot;
+            var previous = entry.index > 0 ? history[entry.index - 1] : null;
+            var row = document.createElement("tr");
+            row.className = "history-day-row";
+            row.hidden = !expandedByDefault;
+            var dateCell = document.createElement("th");
+            dateCell.scope = "row";
+            dateCell.textContent = formatIsoDate(snapshot.date);
+            row.appendChild(dateCell);
+
+            ["HV", "FO", "Overall"].forEach(function (metric) {
+              var cell = document.createElement("td");
+              var value = Number(snapshot[metric]);
+              var delta = previous ? value - Number(previous[metric]) : null;
+              cell.innerHTML =
+                "<span class='history-value'>" + value + "%</span>" +
+                formatDelta(delta);
+              row.appendChild(cell);
+            });
+
+            var weatherCell = document.createElement("td");
+            var weatherLabel = snapshot.adverseWeather ? "Adverse weather / No offshore sailing" : "No adverse weather";
+            weatherCell.innerHTML =
+              "<label class='history-weather" + (snapshot.adverseWeather ? " is-checked" : "") + "'>" +
+                "<input type='checkbox' disabled" + (snapshot.adverseWeather ? " checked" : "") + " aria-label='" + escapeHtml(weatherLabel) + "'>" +
+                "<span>" + (snapshot.adverseWeather ? "No sailing" : "No") + "</span>" +
+              "</label>";
+            row.appendChild(weatherCell);
+
+            if (snapshot.note) row.title = snapshot.note;
+            dayRows.push(row);
+            body.appendChild(row);
           });
 
-          var weatherCell = document.createElement("td");
-          var weatherLabel = snapshot.adverseWeather ? "Adverse weather / No offshore sailing" : "No adverse weather";
-          weatherCell.innerHTML =
-            "<label class='history-weather" + (snapshot.adverseWeather ? " is-checked" : "") + "'>" +
-              "<input type='checkbox' disabled" + (snapshot.adverseWeather ? " checked" : "") + " aria-label='" + escapeHtml(weatherLabel) + "'>" +
-              "<span>" + (snapshot.adverseWeather ? "No sailing" : "No") + "</span>" +
-            "</label>";
-          row.appendChild(weatherCell);
-
-          if (snapshot.note) row.title = snapshot.note;
-          body.appendChild(row);
+          toggle.addEventListener("click", function () {
+            var expanded = toggle.getAttribute("aria-expanded") !== "true";
+            toggle.setAttribute("aria-expanded", String(expanded));
+            toggle.setAttribute("aria-label", (expanded ? "Collapse " : "Expand ") + formatHistoryMonth(group.key));
+            monthRow.classList.toggle("is-collapsed", !expanded);
+            dayRows.forEach(function (row) { row.hidden = !expanded; });
+          });
         });
 
         if (!history.length) {
           body.innerHTML = "<tr><td colspan='5'>No daily history recorded yet.</td></tr>";
         }
+      }
+
+      function formatHistoryMonth(monthKey) {
+        var parts = monthKey.split("-");
+        return new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" })
+          .format(new Date(Number(parts[0]), Number(parts[1]) - 1, 1));
       }
 
       function formatDelta(delta) {

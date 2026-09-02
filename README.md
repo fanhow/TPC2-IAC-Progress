@@ -8,7 +8,7 @@ Static GitHub Pages dashboard for the five TPC2 OSS inter-array cables:
 - IAC22 / String 5
 - IAC26 / String 6
 
-The dashboard separates HV and FO workstreams, shows each stage status, calculates indicative row and overall progress, and keeps a daily HV, FO and Overall history with percentage-point changes. It also includes a browser-side daily recap parser that can commit validated updates to GitHub.
+The dashboard separates HV and FO workstreams, shows each stage status, calculates indicative row and overall progress, and keeps a daily HV, FO and Overall history with percentage-point changes. Daily history is grouped by month: the current month is expanded by default, and each month heading can be clicked to expand or collapse its records. It also includes a browser-side daily recap parser that can commit validated updates to GitHub.
 
 ## Files
 
