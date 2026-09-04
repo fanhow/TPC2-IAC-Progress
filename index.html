@@ -963,7 +963,7 @@
       <div class="update-form">
         <p class="section-kicker">Daily update</p>
         <h2 class="panel-title" id="update-title">Paste today’s offshore recap</h2>
-        <p class="update-help">Paste the latest day-shift or night-shift message, check the detected IAC/String mapping, then commit the update to GitHub.</p>
+        <p class="update-help">Paste the latest day-shift or night-shift message. An IAC number is enough; the String mapping is added automatically. Check the detected update, then commit it to GitHub.</p>
         <label class="field-label" for="recap-input">Daily recap</label>
         <textarea id="recap-input" spellcheck="false" placeholder="8/30 Offshore Recap Day Shift:
 
@@ -1271,13 +1271,14 @@ SPIE – OSS HV
           "String 5": "IAC22",
           "String 6": "IAC26"
         };
+        var sectionWorkstream = null;
         var activeWorkstream = null;
         var activeTarget = null;
         var updates = {};
         var lines = text.split(/\r?\n/);
 
         function getTarget(line) {
-          var iacMatch = line.match(/\bIAC\s*0?(\d{1,2})\b/i);
+          var iacMatch = line.match(/\bIAC[\s#:_-]*0?(\d{1,2})\b/i);
           var stringMatch = line.match(/\bString\s*([1-6])\b/i);
           if (!iacMatch && !stringMatch) return null;
 
@@ -1302,7 +1303,7 @@ SPIE – OSS HV
 
         function stripTargetIdentifiers(line) {
           return line
-            .replace(/\bIAC\s*0?\d{1,2}\b/ig, "")
+            .replace(/\bIAC[\s#:_-]*0?\d{1,2}\b/ig, "")
             .replace(/\bString\s*[1-6]\b/ig, "")
             .replace(/^[\s\-:\/|]+|[\s\-:\/|]+$/g, "")
             .trim();
@@ -1311,6 +1312,19 @@ SPIE – OSS HV
         function extractWorkstream(line) {
           var match = line.match(/\b(HV|FO)\b/i);
           return match ? match[1].toUpperCase() : null;
+        }
+
+        function inferActivityWorkstream(line) {
+          var lower = line.toLowerCase();
+          var hvActivity = /\b(?:l[123]|phase|plug(?:ged)?(?:\s+in)?|break\s+test|heat\s*shrink|straightening\s+bars?|outer\s+jacket|bonding\s+cables?|core\s+prep|stress\s+cone)\b/i.test(lower);
+          var foActivity = /\b(?:fibre|fiber|enclosure|splic(?:e|ed|ing)?|tray|topside\s+cable)\b/i.test(lower);
+
+          if (hvActivity && !foActivity) return "HV";
+          if (foActivity && !hvActivity) return "FO";
+          if (hvActivity && foActivity) {
+            return /\b(?:l[123]|plug(?:ged)?(?:\s+in)?|break\s+test|heat\s*shrink|bonding\s+cables?)\b/i.test(lower) ? "HV" : "FO";
+          }
+          return null;
         }
 
         function addUpdate(workstream, target, line) {
@@ -1347,21 +1361,23 @@ SPIE – OSS HV
           var explicitWorkstream = extractWorkstream(line);
 
           if (heading && !target) {
-            activeWorkstream = heading[1].toUpperCase();
+            sectionWorkstream = heading[1].toUpperCase();
+            activeWorkstream = sectionWorkstream;
             activeTarget = null;
             return;
           }
 
           if (target) {
-            if (explicitWorkstream) activeWorkstream = explicitWorkstream;
-            if (!activeWorkstream) {
-              throw new Error("Add an HV or FO heading before this line: " + line);
+            var lineWorkstream = explicitWorkstream || inferActivityWorkstream(line) || sectionWorkstream;
+            if (!lineWorkstream) {
+              throw new Error("Add HV or FO to this line, or place it under an HV/FO heading: " + line);
             }
 
             var remainder = stripTargetIdentifiers(line);
             activeTarget = target;
+            activeWorkstream = lineWorkstream;
             if (!remainder) return;
-            addUpdate(activeWorkstream, target, line);
+            addUpdate(lineWorkstream, target, line);
             return;
           }
 
@@ -1371,7 +1387,7 @@ SPIE – OSS HV
           }
 
           if (/%|plugged|stripp|peel|straighten|splic|earth|tape|complete|outstanding/i.test(line)) {
-            throw new Error("Could not identify the IAC and String for: " + line);
+            throw new Error("Could not identify the IAC or String for: " + line);
           }
         });
 
@@ -1381,7 +1397,7 @@ SPIE – OSS HV
         var updateList = Object.keys(updates).map(function (key) { return updates[key]; });
 
         if (!updateList.length && !adverseWeather) {
-          throw new Error("No IAC/String progress item was found. Include an IAC/String line or an adverse-weather no-sailing note.");
+          throw new Error("No IAC/String progress item was found. Include an IAC number or String number, or an adverse-weather no-sailing note.");
         }
 
         var summary = updateList.length
@@ -1404,9 +1420,10 @@ SPIE – OSS HV
 
         var beforePercent = line.slice(0, match.index).toLowerCase();
         var lower = line.toLowerCase();
+        var readinessPercent = /\b\d+(?:\.\d+)?\s*%\s*(?:ready|prepared)\s+(?:for|to)\s+plug(?:ged)?(?:\s+in)?\b/i.test(lower);
         var substage = /\b(?:splicing|splice|testing|test|termination|pre[- ]?term|earthing|earth|taping|tape|cable)\b/i.test(beforePercent);
         var hasOverallContext = /\b(?:complete|completed|progress|overall)\b/i.test(lower) || !substage;
-        if (substage || !hasOverallContext) return null;
+        if (!readinessPercent && (substage || !hasOverallContext)) return null;
 
         var value = Number(match[1]);
         if (!Number.isFinite(value) || value < 0 || value > 100) {
@@ -1537,6 +1554,14 @@ SPIE – OSS HV
         return btoa(binary);
       }
 
+      function promoteStage(stages, key, nextStatus) {
+        var rank = { tbc: 0, pending: 0, progress: 1, done: 2 };
+        var currentStatus = stages[key] || "tbc";
+        if (rank[nextStatus] > rank[currentStatus]) {
+          stages[key] = nextStatus;
+        }
+      }
+
       function applyParsedRecap(sourceData, parsed) {
         var nextData = JSON.parse(JSON.stringify(sourceData));
         var iacToString = {
@@ -1570,23 +1595,49 @@ SPIE – OSS HV
             if (/\bplugged?\s*(?:in)?\b/i.test(lower)) {
               var allThree = /\bl1\s*[/,&]\s*l2\s*[/,&]\s*l3\b[^.]*plug/i.test(lower) ||
                 /\bl1\b[^.]*\bl2\b[^.]*\bl3\b[^.]*plug/i.test(lower);
-              workstream.stages.plugIn = allThree ? "done" : "progress";
+              promoteStage(workstream.stages, "plugIn", allThree ? "done" : "progress");
             }
             if (/\b(?:l2\b[^.]*stripp|l2\b[^.]*peel|outer\s+jacket[^.]*peel|jacket[^.]*peel)/i.test(lower)) {
-              workstream.stages.corePrep = "done";
+              promoteStage(workstream.stages, "corePrep", "done");
             }
             if (/\bstraightening\s+bars?|bars?\s+(?:applied|installed)/i.test(lower)) {
-              workstream.stages.corePrep = "progress";
+              promoteStage(workstream.stages, "corePrep", "progress");
+            }
+            if (/\bheat\s*shrink\b/i.test(lower)) {
+              var heatShrinkDone = /\bheat\s*shrink\b[^.;]*(?:applied|installed|complete|completed|done)\b/i.test(lower) ||
+                /\b(?:applied|installed|complete|completed|done)\b[^.;]*\bheat\s*shrink\b/i.test(lower);
+              promoteStage(workstream.stages, "heatShrink", heatShrinkDone ? "done" : "progress");
+            }
+            if (/\b(?:earth|earthing|bonding\s+cables?)\b/i.test(lower)) {
+              var accessoriesDone = /\b(?:earth|earthing|bonding\s+cables?)\b[^.;]*(?:complete|completed|done|installed|applied)\b/i.test(lower) ||
+                /\b(?:complete|completed|done|installed|applied)\b[^.;]*\b(?:earth|earthing|bonding\s+cables?)\b/i.test(lower);
+              promoteStage(workstream.stages, "accessories", accessoriesDone ? "done" : "progress");
+            }
+            if (/\bbreak\s+test\b/i.test(lower)) {
+              promoteStage(workstream.stages, "corePrep", "progress");
             }
           } else {
-            if (/\bsplic/i.test(lower) && /(?:100\s*%|\bcomplete\b|\bdone\b)/i.test(lower)) {
-              workstream.stages.splicing = "done";
+            if (/\benclosure\b/i.test(lower)) {
+              var enclosureDone = /\benclosure(?:\s+prep(?:aration)?)?\b[^.;]*(?:complete|completed|done)\b/i.test(lower);
+              promoteStage(workstream.stages, "enclosurePrep", enclosureDone ? "done" : "progress");
+            }
+            if (/\b(?:cable\s+(?:prep|prepped|prepared)|prepped\s+into|prepared\s+into|introduced|wrapped\s+away)\b/i.test(lower)) {
+              var cablePrepDone = /\bcable\s+(?:prep|preparation)\b[^.;]*(?:complete|completed|done)\b/i.test(lower);
+              promoteStage(workstream.stages, "cablePrep", cablePrepDone ? "done" : "progress");
+            }
+            if (/\b(?:tray|routing|wrapped\s+away)\b/i.test(lower)) {
+              var routingDone = /\b(?:tray|routing)\b[^.;]*(?:complete|completed|done)\b/i.test(lower);
+              promoteStage(workstream.stages, "routingTrays", routingDone ? "done" : "progress");
+            }
+            if (/\bsplic/i.test(lower)) {
+              var splicingDone = /(?:100\s*%|\ball\b[^.;]*\bsplic|\bsplicing\b[^.;]*(?:complete|completed|done)|\b(?:complete|completed|done)\b[^.;]*\bsplicing\b)/i.test(lower);
+              promoteStage(workstream.stages, "splicing", splicingDone ? "done" : "progress");
             }
             if (/\b(?:earth|earthing)\b/i.test(lower)) {
-              workstream.stages.earthing = /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress";
+              promoteStage(workstream.stages, "earthing", /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress");
             }
             if (/\b(?:tape|taping)\b/i.test(lower)) {
-              workstream.stages.closeOut = /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress";
+              promoteStage(workstream.stages, "closeOut", /\b(?:complete|completed|done)\b/i.test(lower) ? "done" : "progress");
             }
           }
 

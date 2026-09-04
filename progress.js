@@ -158,10 +158,10 @@ window.progressData = {
     {
       "date": "2026-09-04",
       "adverseWeather": false,
-      "HV": 58,
+      "HV": 64,
       "FO": 58,
-      "Overall": 58,
-      "note": "FO IAC21 / String 1: IAC21 FO cable 1 & topside cable prepped into enclosure (Tray A spliced); FO IAC09 / String 3: ⁠IAC09 FO cable 2&3 introduced and wrapped away ⁠IAC09 heat shrink applied & earthing complete; FO IAC17 / String 2: ⁠IAC17 L1&L2 break test passed, 60% ready for plug in"
+      "Overall": 61,
+      "note": "FO IAC21 / String 1: IAC21 FO cable 1 & topside cable prepped into enclosure (Tray A spliced); FO IAC09 / String 3: IAC09 FO cable 2&3 introduced and wrapped away; HV IAC09 / String 3: IAC09 heat shrink applied & earthing complete; HV IAC17 / String 2: IAC17 L1&L2 break test passed, 60% ready for plug in"
     }
   ],
   "iacs": [
@@ -174,13 +174,13 @@ window.progressData = {
           "hangOff": "done",
           "softRouting": "done",
           "corePrep": "done",
-          "heatShrink": "progress",
-          "accessories": "progress",
+          "heatShrink": "done",
+          "accessories": "done",
           "plugIn": "done",
           "closeOut": "pending"
         },
-        "remaining": "Complete L2 termination and plug-in, followed by close-out",
-        "note": "String 3 / IAC09: L1, L2 and L3 plugged in. L2 shrink tube heating to be started, and all bonding cables to be installed."
+        "remaining": "Complete remaining inspection and close-out items",
+        "note": "Heat shrink applied and earthing completed. L1, L2 and L3 were previously reported plugged in."
       },
       "FO": {
         "stages": {
@@ -188,14 +188,14 @@ window.progressData = {
           "enclosurePrep": "progress",
           "cablePrep": "progress",
           "routingTrays": "progress",
-          "earthing": "done",
+          "earthing": "tbc",
           "preTermTest": "progress",
           "splicing": "pending",
           "retestScada": "pending",
           "closeOut": "pending"
         },
         "remaining": "Planned from 29 Aug, but 31 Aug–1 Sep are expected no-sailing days; completion may move later",
-        "note": "⁠IAC09 FO cable 2&3 introduced and wrapped away ⁠IAC09 heat shrink applied & earthing complete",
+        "note": "IAC09 FO cable 2&3 introduced and wrapped away.",
         "reportedPercent": 10
       }
     },
@@ -213,8 +213,9 @@ window.progressData = {
           "plugIn": "pending",
           "closeOut": "pending"
         },
-        "remaining": "Continue core preparation and HV termination works",
-        "note": "String 2 / IAC17: L1/L2/L3 ready for termination"
+        "remaining": "Complete remaining phase readiness checks and proceed with plug-in",
+        "note": "L1 and L2 break tests passed; 60% ready for plug-in.",
+        "reportedPercent": 60
       },
       "FO": {
         "stages": {
@@ -229,7 +230,7 @@ window.progressData = {
           "closeOut": "done"
         },
         "remaining": "Completed",
-        "note": "⁠IAC17 L1&L2 break test passed, 60% ready for plug in"
+        "note": "FO testing was previously reported completed. A String 2 earthing arrangement appears on the 2 Sep night plan, but its workstream and shift availability are not confirmed."
       }
     },
     {
@@ -257,7 +258,7 @@ window.progressData = {
           "routingTrays": "done",
           "earthing": "tbc",
           "preTermTest": "tbc",
-          "splicing": "pending",
+          "splicing": "progress",
           "retestScada": "pending",
           "closeOut": "pending"
         },

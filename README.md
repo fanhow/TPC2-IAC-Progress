@@ -29,7 +29,7 @@ The dashboard separates HV and FO workstreams, shows each stage status, calculat
 4. Check the IAC/String mapping shown beside the form.
 5. Press **Update GitHub**.
 
-The token is used only by the current browser tab and is not written into `index.html`, `progress.js`, or the repository. The parser rejects mismatched IAC/String pairs. Keep property names in `progress.js` quoted so the website can read the file safely without executing repository code.
+The token is used only by the current browser tab and is not written into `index.html`, `progress.js`, or the repository. An IAC number may be entered without its String number; the approved mapping is added automatically. The parser uses an explicit HV/FO label or common work-stage wording to identify the workstream, and it rejects mismatched IAC/String pairs or genuinely ambiguous lines. Keep property names in `progress.js` quoted so the website can read the file safely without executing repository code.
 
 ### Manual file update
 
