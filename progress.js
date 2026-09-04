@@ -74,8 +74,8 @@
 /* TPC2 SPIE IAC Progress — daily update file */
 
 window.progressData = {
-  "statusDate": "2026-09-03",
-  "basisLabel": "Offshore field update 03 Sept 2026",
+  "statusDate": "2026-09-04",
+  "basisLabel": "Offshore field update 04 Sept 2026",
   "timeline": {
     "start": "2026-08-21",
     "endExclusive": "2026-09-13"
@@ -154,6 +154,14 @@ window.progressData = {
       "FO": 58,
       "Overall": 58,
       "note": "No offshore activities due to adverse weather; daily progress 0 pp"
+    },
+    {
+      "date": "2026-09-04",
+      "adverseWeather": false,
+      "HV": 58,
+      "FO": 58,
+      "Overall": 58,
+      "note": "FO IAC21 / String 1: IAC21 FO cable 1 & topside cable prepped into enclosure (Tray A spliced); FO IAC09 / String 3: ⁠IAC09 FO cable 2&3 introduced and wrapped away ⁠IAC09 heat shrink applied & earthing complete; FO IAC17 / String 2: ⁠IAC17 L1&L2 break test passed, 60% ready for plug in"
     }
   ],
   "iacs": [
@@ -180,14 +188,14 @@ window.progressData = {
           "enclosurePrep": "progress",
           "cablePrep": "progress",
           "routingTrays": "progress",
-          "earthing": "tbc",
+          "earthing": "done",
           "preTermTest": "progress",
           "splicing": "pending",
           "retestScada": "pending",
           "closeOut": "pending"
         },
         "remaining": "Planned from 29 Aug, but 31 Aug–1 Sep are expected no-sailing days; completion may move later",
-        "note": "⁠String 3 / IAC09: 10%",
+        "note": "⁠IAC09 FO cable 2&3 introduced and wrapped away ⁠IAC09 heat shrink applied & earthing complete",
         "reportedPercent": 10
       }
     },
@@ -221,7 +229,7 @@ window.progressData = {
           "closeOut": "done"
         },
         "remaining": "Completed",
-        "note": "FO testing was previously reported completed. A String 2 earthing arrangement appears on the 2 Sep night plan, but its workstream and shift availability are not confirmed."
+        "note": "⁠IAC17 L1&L2 break test passed, 60% ready for plug in"
       }
     },
     {
@@ -255,7 +263,7 @@ window.progressData = {
         },
         "reportedPercent": 50,
         "remaining": "Continue FO termination and testing works",
-        "note": "FO work on String 1 / IAC21 is 50% complete."
+        "note": "IAC21 FO cable 1 & topside cable prepped into enclosure (Tray A spliced)"
       }
     },
     {
