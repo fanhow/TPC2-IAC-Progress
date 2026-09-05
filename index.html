@@ -1391,9 +1391,12 @@ SPIE – OSS HV
           }
         });
 
-        var weatherMention = /\b(adverse weather|high waves|rough seas|strong wind|heavy rain)\b/i.test(text);
+        var weatherMention = /\b(adverse weather|weather conditions?|high waves?|rough seas?|strong winds?|heavy rain|sea state|weather downtime|weathered off)\b/i.test(text);
         var noSailing = /\b(?:no|without)\s+(?:offshore\s+)?(?:activities|activity|sailing|work|operations)\b|\b(?:did not|could not|unable to)\s+(?:go\s+)?offshore\b|\bno offshore\b/i.test(text);
-        var adverseWeather = (weatherMention && noSailing) || /\bdaily progress\s*:?\s*0\s*pp?\b/i.test(text);
+        var workCancelled = /\b(?:offshore\s+)?(?:work|works|activities|activity|operations?|sailing|trip|transfer)\b[^.\n]{0,100}\b(?:cancelled|canceled|called\s+off|suspended|postponed|aborted|stood\s+down|weathered\s+off)\b/i.test(text) ||
+          /\b(?:cancelled|canceled|called\s+off|suspended|postponed|aborted|stood\s+down|weathered\s+off)\b[^.\n]{0,100}\b(?:offshore\s+)?(?:work|works|activities|activity|operations?|sailing|trip|transfer)\b/i.test(text);
+        var heldInPort = /\b(?:vessel|sov|ctv)?\s*(?:remain(?:ed|ing)?|held|stuck)\s+(?:at|in)\s+(?:the\s+)?port\b|\bno\s+(?:vessel\s+)?(?:departure|sailing|transfer)\b/i.test(text);
+        var adverseWeather = (weatherMention && (noSailing || workCancelled || heldInPort)) || /\bdaily progress\s*:?\s*0\s*pp?\b/i.test(text);
         var updateList = Object.keys(updates).map(function (key) { return updates[key]; });
 
         if (!updateList.length && !adverseWeather) {

@@ -84,6 +84,8 @@ Add an entry under **history**, retain the previous cumulative percentages, and 
 
 Use **adverseWeather: true** only when the offshore shift did not proceed due to weather. The history table displays a checked, read-only weather box. Keeping the cumulative percentages unchanged records daily progress as 0 percentage points.
 
+The recap parser accepts common weather-cancellation wording, including **no sailing**, **offshore works cancelled/canceled due to adverse weather**, **transfer called off**, and **vessel held in port due to weather**.
+
 ## First deployment to GitHub Pages
 
 Repository:

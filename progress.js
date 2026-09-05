@@ -74,8 +74,8 @@
 /* TPC2 SPIE IAC Progress — daily update file */
 
 window.progressData = {
-  "statusDate": "2026-09-04",
-  "basisLabel": "Offshore field update 04 Sept 2026",
+  "statusDate": "2026-09-05",
+  "basisLabel": "No offshore activities due to adverse weather",
   "timeline": {
     "start": "2026-08-21",
     "endExclusive": "2026-09-13"
@@ -162,6 +162,14 @@ window.progressData = {
       "FO": 58,
       "Overall": 61,
       "note": "FO IAC21 / String 1: IAC21 FO cable 1 & topside cable prepped into enclosure (Tray A spliced); FO IAC09 / String 3: IAC09 FO cable 2&3 introduced and wrapped away; HV IAC09 / String 3: IAC09 heat shrink applied & earthing complete; HV IAC17 / String 2: IAC17 L1&L2 break test passed, 60% ready for plug in"
+    },
+    {
+      "date": "2026-09-05",
+      "adverseWeather": true,
+      "HV": 64,
+      "FO": 58,
+      "Overall": 61,
+      "note": "No offshore activities due to adverse weather; daily progress 0 pp"
     }
   ],
   "iacs": [
