@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#071b2d">
   <meta name="description" content="TPC2 OSS SPIE inter-array cable HV and fibre-optic progress dashboard.">
   <title>TPC2 OSS — SPIE IAC Progress</title>
+  <link rel="stylesheet" href="./progress-export.css">
   <style>
     :root {
       color-scheme: dark;
@@ -1017,6 +1018,23 @@ SPIE – OSS HV
       </div>
     </section>
 
+    <section class="panel export-panel" aria-labelledby="export-title">
+      <div class="export-heading">
+        <div><p class="section-kicker">Progress trends &amp; exports</p><h2 class="panel-title" id="export-title">Daily progress at a glance</h2></div>
+        <div class="export-actions">
+          <label for="export-month">Period <select id="export-month" aria-label="Chart and export period"></select></label>
+          <button type="button" id="export-excel" class="export-button">Export Excel .xlsx</button>
+          <button type="button" id="export-png" class="export-button secondary">Export chart .png</button>
+        </div>
+      </div>
+      <div id="export-summary" class="export-summary"></div>
+      <div class="export-chart-wrap"><canvas id="export-chart" width="1100" height="420" role="img" aria-label="Daily cumulative HV, FO and Overall progress. Exact percentages are listed in daily progress history below."></canvas></div>
+      <p id="export-readout" class="export-readout" aria-live="polite">Select a point to see the daily percentages.</p>
+      <div class="export-weather"><strong>No sailing · adverse weather</strong><div id="export-weather-dates"></div></div>
+      <p class="export-footnote">Percentages are cumulative. Changes are in percentage points (pp) versus the previous recorded date. Gaps mean no record, not zero progress. Orange bands mark recorded weather no-sailing days.</p>
+      <p id="export-status" class="export-status" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="panel history-panel" aria-labelledby="history-title">
       <div class="history-head">
         <div>
@@ -1068,6 +1086,7 @@ SPIE – OSS HV
   </main>
 
   <script src="./progress.js"></script>
+  <script src="./progress-export.js"></script>
   <script>
     (function () {
       "use strict";
@@ -1716,6 +1735,7 @@ SPIE – OSS HV
       }
 
       function renderHistory() {
+        if (window.ProgressExport) window.ProgressExport.update(data);
         var body = document.getElementById("history-body");
         var history = Array.isArray(data.history) ? data.history : [];
         body.innerHTML = "";

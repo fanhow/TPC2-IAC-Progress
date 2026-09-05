@@ -16,10 +16,24 @@ The dashboard separates HV and FO workstreams, shows each stage status, calculat
 |---|---|---|
 | **index.html** | Layout, styling and dashboard logic | Do not edit |
 | **progress.js** | Current status, daily history, remaining shifts and notes | Updated by the website or manually |
+| **progress-export.js / progress-export.css** | Trend chart, month selection and Excel/PNG exports | Do not edit |
+| **vendor/** | Local ExcelJS 4.4.0 browser bundle and MIT license | Keep with the site |
 | **iac-string-mapping.svg** | North/South IAC and String reference | Do not edit unless the approved mapping changes |
 | **README.md** | Deployment and update instructions | Keep for reference |
 
 ## Daily update
+
+### Export progress
+
+1. Go to **Progress trends & exports**, above the daily history.
+2. Choose a month or **All recorded dates**. The latest recorded month is selected initially.
+3. Click **Export Excel .xlsx** or **Export chart .png**. No GitHub token is required.
+
+Excel includes **Daily Progress** (numeric dates/percentages, change in percentage points, previous record date and recap), **No Sailing**, **Trend Chart** (an image snapshot), and **Read Me**. PNG includes the trend chart and a daily percentage/weather table, ready to attach to MoM or messages. To edit a chart in Excel, use the numeric data in Daily Progress.
+
+Orange dates indicate recorded adverse-weather no-sailing days. Unrecorded dates within the selected observed period remain blank, with gaps in the chart; they are not inferred as zero progress or no sailing. Changes compare the previous recorded date, which may be outside the selected month. A date without a weather flag does not prove that sailing occurred. Only `progress.js` needs routine updates; the chart and exports refresh with the daily history, including after Update GitHub succeeds.
+
+The Excel exporter loads the bundled [ExcelJS](https://github.com/exceljs/exceljs) library only when needed; export data stays in the browser. Deploy all the files listed above, including `vendor/`.
 
 ### Update from the website
 
